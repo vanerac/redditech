@@ -17,13 +17,13 @@ jobs:
       name: Install pod dependencies
     - name: Build iOS (debug)
       run: "xcodebuild \
-        -workspace ios/HelloReactNative.xcworkspace \
-        -scheme HelloReactNative \
+        -workspace ios/redditech_project.xcworkspace \
+        -scheme redditech_project \
         clean archive \
         -sdk iphoneos \
         -configuration Debug \
         -UseModernBuildSystem=NO \
-        -archivePath $PWD/HelloReactNative \
+        -archivePath $PWD/redditech_project \
         CODE_SIGNING_ALLOWED=NO"
   android:
     runs-on: ubuntu-20.04
