@@ -7,7 +7,7 @@
  */
 
  import React, {useEffect, useState}  from 'react';
- import type {Node} from 'react';
+ import  { Node} from 'react';
  import {
    SafeAreaView,
    ScrollView,
@@ -18,7 +18,7 @@
    View,
    FlatList,
  } from 'react-native';
- 
+
  // import {
  //   Colors,
  //   DebugInstructions,
@@ -26,7 +26,7 @@
  //   LearnMoreLinks,
  //   ReloadInstructions,
  // } from 'react-native/Libraries/NewAppScreen';
- 
+
  // const GetMoviesFromApi = () => {
  //   return fetch('https://reactnative.dev/movies.json')
  //     .then((response) => response.json())
@@ -37,7 +37,7 @@
  //       console.error(error);
  //     });
  // };
- 
+
  const Section = ({children, title}): Node => {
    const isDarkMode = useColorScheme() === 'dark';
    return (
@@ -66,17 +66,17 @@
      </View>
    );
  };
- 
+
  const App: () => Node = () => {
    // const isDarkMode = useColorScheme() === 'dark';
- 
+
    // const backgroundStyle = {
    //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
    // };
- 
+
    const [isLoading, setLoading] = useState(true);
    const [data, setData] = useState([]);
- 
+
    useEffect(() => {
      fetch('https://raw.githubusercontent.com/adhithiravi/React-Hooks-Examples/master/testAPI.json')
        .then((response) => response.json())
@@ -84,7 +84,7 @@
        .catch((error) => console.error(error))
        .finally(() => setLoading(false));
    }, []);
- 
+
    return (
      <SafeAreaView>
        {/* <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} /> */}
@@ -106,7 +106,7 @@
            <Section title="Test">
              Ceci provient d'un component
            </Section>
-           
+
            {/* <Section title="Learn More">
              Read the docs to discover what to do next:
            </Section> */}
@@ -124,7 +124,7 @@
      </SafeAreaView>
    );
  };
- 
+
  const styles = StyleSheet.create({
    sectionContainer: {
      marginTop: 32,
@@ -143,6 +143,5 @@
      fontWeight: '700',
    },
  });
- 
+
  export default App;
- 
