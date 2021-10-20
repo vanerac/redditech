@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "B-DEV-501-BDX-5-1-redditech-corentin.mas",
-    "slug": "B-DEV-501-BDX-5-1-redditech-corentin.mas",
+    "slug": "myapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
