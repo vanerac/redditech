@@ -18,11 +18,8 @@ jobs:
           java-version: '9.0.4' # The JDK version to make available on the path.
           java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
           architecture: x64 # (x64 or x86) - defaults to x64
-      - uses: expo/expo-github-action@v5
-        with:
-          expo-version: 3.x
-          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
-          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+      - name: Intall expo
+        run: sudo npm i -g expo-cli
       - name: Install deps
         run: yarn install
       - name: Build Android APK Bundle
