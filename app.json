@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "B-DEV-501-BDX-5-1-redditech-corentin.mas",
+    "name": "B-DEV-501-BDX-5-1-redditech-louis-antoine.koeck",
     "slug": "myapp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -27,6 +27,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "scheme": "myapp://redirect"
   }
 }
