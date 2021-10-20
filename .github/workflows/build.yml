@@ -1,7 +1,7 @@
 name: iOS
 on: [push, pull_request]
 jobs:
-  build:
+  ios:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -25,3 +25,20 @@ jobs:
         -UseModernBuildSystem=NO \
         -archivePath $PWD/HelloReactNative \
         CODE_SIGNING_ALLOWED=NO"
+  android:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js v12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - name: Install
+      run: npm install
+
+    
+    - run: ./gradlew assembleDebug -Dorg.gradle.logging.level=info
+      working-directory: android
+      name: Build Android apk (debug)
+
