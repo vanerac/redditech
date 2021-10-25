@@ -6,9 +6,12 @@ import { useEffect, useState } from 'react';
 // import { useHistory } from "react-router-dom";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { getAccessToken } from './API.js'
 import { APIrequest } from './API.js'
 import './global.js'
+import { SearchBar } from 'react-native-elements';
+import { Searchbar } from 'react-native-paper';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -28,21 +31,19 @@ function Login({ navigation }) {
     },
     url
   );
-  if (request != null) {
-    console.log(request.url);
-    console.log(request.redirectUri)
-  }
-  React.useEffect(() => {
-    if (response?.type === 'success') {
-      const { code } = response.params;
-      global.authCode = code
-      console.log(`your code -> ${global.authCode}`)
-      getAccessToken(global.authCode);
-      navigation.navigate('Home', {
-        resCode: global.authCode,
-      })
-    }
-  }, [response]);
+
+  useEffect(() => {
+      if (response?.type === 'success') {
+        const { code } = response.params;
+        global.authCode = code
+        // console.log(`your code -> ${global.authCode}`)
+        // var ok = await getAccessToken(global.authCode);
+        // console.log(ok)
+        navigation.navigate('Home', {
+          resCode: global.authCode,
+        })
+      }
+    }, [response]);
 
   return (
     <View style={styles.container}>
@@ -64,40 +65,59 @@ const styles = StyleSheet.create({
 });
 
 function HomeScreen({ route, navigation }) {
-  const { resCode } = route.params;
+  // const { resCode } = route.params;
+  // console.log(`global.authCode -> ${global.authCode}`)
+  // console.log(`global.accessToken -> ${global.accessToken}`)
+
+  // var oui = getAccessToken(global.authCode);
+  // const promise1 = Promise.resolve(oui);
+  // all >>>>>>> promise
+  // promise1.then((value) => {
+  //   console.log(value);
+  // });
+
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
+  console.log(searchQuery)
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View>
+      <Searchbar
+      placeholder="Search"
+      onChangeText={onChangeSearch}
+      value={searchQuery}
+      />
       <Text>
-        Welcome to the Home Screen ! {"\n"}
-        Here is yout Auth code : {JSON.stringify(resCode)}
+        Welcome to the Home Screen !
       </Text>
       <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
+        title="Go to Settings"
+        onPress={() => navigation.navigate('Settings')}
       />
     </View>
   );
 }
 
-function DetailsScreen() {
+function SettingsScreen() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
     </View>
   );
 }
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Stack.Screen name="Login" component={Login} />
+          <Tab.Screen name="Home" component={HomeScreen}/>
+          <Tab.Screen name="Settings" component={SettingsScreen}/>
+        </Tab.Navigator>
+      </NavigationContainer>
   );
 }
