@@ -4,7 +4,7 @@ import {makeRedirectUri, useAuthRequest} from 'expo-auth-session';
 import {Button, StyleSheet, View, FlatList, Text} from 'react-native';
 import {useEffect, useState} from 'react';
 // import { useHistory } from "react-router-dom";
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Auth from './API.js'
@@ -38,14 +38,7 @@ function Login({route, navigation}) {
     useEffect(() => {
         if (response?.type === 'success') {
             const {code} = response.params;
-            api.getAccessToken(code).then((token) => {
-                api.makeRequest('me').then((data) => {
-                    console.log(data);
-                    navigation.navigate('Home')
-                })
-
-            })
-
+            api.getAccessToken(code).then((token) => {navigation.navigate('Home')})
         }
     }, [response]);
 
@@ -71,16 +64,6 @@ const styles = StyleSheet.create({
 });
 
 function HomeScreen({route, navigation}) {
-    // const { resCode } = route.params;
-    // console.log(`global.authCode -> ${global.authCode}`)
-    // console.log(`global.accessToken -> ${global.accessToken}`)
-
-    // var oui = getAccessToken(global.authCode);
-    // const promise1 = Promise.resolve(oui);
-    // all >>>>>>> promise
-    // promise1.then((value) => {
-    //   console.log(value);
-    // });
 
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -95,20 +78,46 @@ function HomeScreen({route, navigation}) {
                 value={searchQuery}
             />
             <Text>
-                Welcome to the Home Screen !
             </Text>
-            <Button
-                title="Go to Settings"
-                onPress={() => navigation.navigate('Settings')}
-            />
         </View>
     );
 }
 
-function SettingsScreen() {
+// class AccountScreen extends React.Component {
+
+//     constructor(props) {
+//         super(props);
+//         this.state = {data: []};
+//     }
+
+//     componentDidMount() {
+//         api.makeRequest('me').then(data => {
+//             console.log(data)
+//         })
+//     }
+
+//     render() {
+//         return <Text>Bonjour, {this.props.data.name}</Text>;
+//       }
+// }
+
+function AccountScreen({route}) {
+    const [data, setData] = useState([]);
+    const {api} = route.params;
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused)
+            api.makeRequest('me').then(data => {
+            setData(data)
+        })
+    },[isFocused]);
+    // setData
+    // console.log('updqte');
     return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Text>Settings!</Text>
+            <Text>Settings! ${data.name}</Text>
         </View>
     );
 }
@@ -123,7 +132,7 @@ export default function App() {
             <Tab.Navigator>
                 <Tab.Screen name="Login" component={Login} initialParams={{api: API}}/>
                 <Tab.Screen name="Home" component={HomeScreen} initialParams={{api: API}}/>
-                <Tab.Screen name="Settings" component={SettingsScreen}/>
+                <Tab.Screen name="Account" component={AccountScreen} initialParams={{api: API}}/>
             </Tab.Navigator>
         </NavigationContainer>
     );

@@ -61,6 +61,7 @@ export default class Auth {
             method: 'GET',
             headers: {"Authorization": "bearer " + this.access_token}, "User-agent": "redditech",
         })
+        // console.log("inside")
         // todo : refresh si token expired
         const data = res.json()
         if (data.error)
