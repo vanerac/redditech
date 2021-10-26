@@ -1,36 +1,71 @@
-import { encode } from "base-64"
+import {encode} from "base-64"
 
-export const APIrequest = async (accessToken, request) => {
-    return await fetch(request, {
-      method: 'GET',
-      headers: {"Authorization" : "bearer " + accessToken}, "User-agent": "redditech",
-    })
-    .then(response => response.json().then(data => {
-      return data
-    }))
-    .catch((error) => {
-      console.error(error);
-    });
-  }
+export default class Auth {
+    constructor() {
+        this.auth_code = undefined;
+        this.access_token = undefined;
+        this.refresh_token = undefined;
+    }
 
+    static base_url = 'https://oauth.reddit.com/api/v1/';
+    static redirect_uri = 'exp://127.0.0.1:19000';
+    static client_id = 'e3t0ixFSw5lrApAqVPrGMA'
+    static scopes = ['identity']
+    static url = {
+        authorizationEndpoint: 'https://www.reddit.com/api/v1/authorize.compact',
+        tokenEndpoint: 'https://www.reddit.com/api/v1/access_token',
+        refreshEndpoint: 'https://www.reddit.com/api/v1/refresh_token'
+    };
 
-  // changer ca car pas tjrs authorization code + mettre un return de data 
-  // car impossible de set des varibales globales dans un scope
-export const getAccessToken = (responseCode) => {
-  var formData = new FormData();
-  formData.append("grant_type", "authorization_code");
-  formData.append("code", responseCode);
-  formData.append("redirect_uri", "exp://127.0.0.1:19000");
-  console.log(`okkkk = ${global.authCode}`)
-  global.accessToken = 123
+    static buildForm(grant_type, code) {
+        var formData = new FormData();
+        formData.append("redirect_uri", Auth.redirect_uri);
+        if (grant_type === 'authorization_code') {
+            formData.append("grant_type", "authorization_code");
+            formData.append("code", code);
+        } else if (grant_type === 'refresh_token') {
+            formData.append("grant_type", "authorization_code");
+            formData.append("code", code);
+        } else {
+            throw 'Unhandled Grant type ' + grant_type
+        }
 
-  return fetch('https://www.reddit.com/api/v1/access_token', {
-    method: 'POST',
-    headers: {"Authorization": `Basic ${encode("e3t0ixFSw5lrApAqVPrGMA" + ':')}`},
-    body: formData})
-    .then(response => response.json().then( async data => {
-      return data
-      //var test = await APIrequest(data.access_token, 'https://oauth.reddit.com/api/v1/me')
-      //console.log(test.name)
-    }))
-};
+        return formData;
+    }
+
+     async getAccessToken(auth_code) {
+
+        if (!auth_code)
+            throw 'No Auth Code'
+
+        const formData = Auth.buildForm('authorization_code', auth_code);
+
+        const res = await fetch(Auth.url.tokenEndpoint, {
+            method: 'POST',
+            headers: {"Authorization": `Basic ${encode(Auth.client_id + ':')}`},
+            body: formData
+        });
+        const json = await res.json();
+        // todo : ya des truc a garder ici
+        this.access_token = await json.access_token;
+        return json;
+    }
+
+    async refreshToken() {
+        // todo
+    }
+
+    async makeRequest(route) {
+        console.log(Auth.base_url + route, this.access_token)
+        const res = await fetch(Auth.base_url + route, {
+            method: 'GET',
+            headers: {"Authorization": "bearer " + this.access_token}, "User-agent": "redditech",
+        })
+        // todo : refresh si token expired
+        const data = res.json()
+        if (data.error)
+            throw data.message;
+
+        return data;
+    }
+}
