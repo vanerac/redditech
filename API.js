@@ -68,4 +68,34 @@ export default class Auth {
 
         return data;
     }
+
+    async postRequest(url) {
+        console.log('Fetching on', url)
+    
+        const res = await fetch(url , {
+            method: 'POST',
+             headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
+            "User-agent": "redditech",
+        })
+        const data = res.json()
+        if (data.error)
+            throw data.message;
+    
+        return data;
+    }
+
+    async patchRequest(url) {
+        console.log('Fetching on', url)
+    
+        const res = await fetch(url , {
+            method: 'PATCH',
+             headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
+            "User-agent": "redditech",
+        })
+        const data = res.json()
+        if (data.error)
+            throw data.message;
+    
+        return data;
+    }
 }

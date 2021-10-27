@@ -10,7 +10,8 @@ import {
     Image,
     TouchableOpacity,
     SafeAreaView,
-    ScrollView
+    ScrollView,
+    Switch
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import {NavigationContainer, useIsFocused} from '@react-navigation/native';
@@ -22,6 +23,8 @@ import {SearchBar} from 'react-native-elements';
 import {Searchbar} from 'react-native-paper';
 import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {Search} from "./src/Search";
+import {Settings} from "./src/Settings"
+// import {styles} from './style/style.js'
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -160,25 +163,6 @@ function AccountScreen({route}) {
     );
 }
 
-function SettingsScreen({route, navigation}) {
-    const {api} = route.params;
-
-    api.testRequest('delete_sr_banner').then(data => {
-        // setData(data)
-        // setDescription(data.subreddit.public_description)
-        // console.log(data.subreddit.public_description)
-        // console.log(test.public_description);
-        console.log(data)
-    })
-    return (
-        <View>
-            <Text>
-                Settings
-            </Text>
-        </View>
-    );
-}
-
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -226,7 +210,7 @@ export default function App() {
                 <Tab.Screen name="Login" component={Login} initialParams={{api: API}}/>
                 <Tab.Screen name="Home" component={HomeScreen} initialParams={{api: API}}/>
                 <Tab.Screen name="Account" component={AccountScreen} initialParams={{api: API}}/>
-                <Tab.Screen name="Settings" component={SettingsScreen} initialParams={{api: API}}/>
+                <Tab.Screen name="Settings" component={Settings} initialParams={{api: API}}/>
                 <Tab.Screen name="Search" component={Search} initialParams={{api: API}}/>
             </Tab.Navigator>
         </NavigationContainer>
@@ -234,6 +218,13 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+    settingsSwitch: {
+        flexDirection: "row",
+        // alignSelf: "center",
+        marginTop: 32,
+        // flexDirection: "row",
+        // justifyContent: "flex-end"
+    },
     logo: {
         marginTop: 50,
         justifyContent: 'center',
