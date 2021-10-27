@@ -82,20 +82,28 @@ function HomeScreen({route, navigation}) {
 function AccountScreen({route}) {
     const [data, setData] = useState({
         "icon_img": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/2048px-Solid_white.svg.png"
+        // "public_description": "tmp"
     });
+
+    const [description, setDescription] = useState();
     const {api} = route.params;
 
     const isFocused = useIsFocused();
 
     useEffect(() => {
         if (isFocused)
-            api.makeRequest('me').then(data => {
+            api.makeRequest('v1/me').then(data => {
             setData(data)
+            setDescription(data.subreddit.public_description)
+            // console.log(data.subreddit.public_description)
+            // console.log(test.public_description);
         })
     },[isFocused]);
     // setData
-    console.log(data);
-    console.log(data.subscribers)
+    // console.log(`here =>`, data.icon_img);
+    // console.log(`here2 =>`, data.public_description);
+    // console.log(data)
+    // console.log(data.subscribers)
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -123,8 +131,31 @@ function AccountScreen({route}) {
                         <Text style={[styles.text, styles.subText]}>Friends</Text>
                     </View>
                 </View>
+                <View style={styles.infoContainer}>
+                    <Text style={[styles.text, { color: "#AEB5BC", fontSize: 20, margin: 20 }]}>Profile Description :</Text>
+                    <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{description}</Text>
+                </View>
             </ScrollView>
         </SafeAreaView>
+    );
+}
+
+function SettingsScreen({route, navigation}) {
+    const {api} = route.params;
+
+    api.testRequest('delete_sr_banner').then(data => {
+        // setData(data)
+        // setDescription(data.subreddit.public_description)
+        // console.log(data.subreddit.public_description)
+        // console.log(test.public_description);
+        console.log(data)
+    })
+    return (
+        <View>
+            <Text>
+                Settings
+            </Text>
+        </View>
     );
 }
 
@@ -148,7 +179,7 @@ export default function App() {
                         } else if (route.name === 'Account') {
                             return (
                                 <Ionicons
-                                name={'ios-list'}
+                                name={'person-outline'}
                                 size={size}
                                 color={color}
                                 />);
@@ -156,6 +187,13 @@ export default function App() {
                             return (
                                 <Ionicons
                                 name={'log-in-outline'}
+                                size={size}
+                                color={color}
+                                />);
+                        } else if (route.name === 'Settings') {
+                            return (
+                                <Ionicons
+                                name={'settings-outline'}
                                 size={size}
                                 color={color}
                                 />);
@@ -168,6 +206,7 @@ export default function App() {
                 <Tab.Screen name="Login" component={Login} initialParams={{api: API}}/>
                 <Tab.Screen name="Home" component={HomeScreen} initialParams={{api: API}}/>
                 <Tab.Screen name="Account" component={AccountScreen} initialParams={{api: API}}/>
+                <Tab.Screen name="Settings" component={SettingsScreen} initialParams={{api: API}}/>
             </Tab.Navigator>
         </NavigationContainer>
     );

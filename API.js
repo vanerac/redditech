@@ -7,10 +7,11 @@ export default class Auth {
         this.refresh_token = undefined;
     }
 
-    static base_url = 'https://oauth.reddit.com/api/v1/';
+    static base_url = 'https://oauth.reddit.com/api/';
+    static test_url = 'https://reddit.com/api/';
     static redirect_uri = 'exp://127.0.0.1:19000';
     static client_id = 'e3t0ixFSw5lrApAqVPrGMA'
-    static scopes = ['identity']
+    static scopes = ['identity', 'modconfig']
     static url = {
         authorizationEndpoint: 'https://www.reddit.com/api/v1/authorize.compact',
         tokenEndpoint: 'https://www.reddit.com/api/v1/access_token',
@@ -57,6 +58,21 @@ export default class Auth {
 
     async makeRequest(route) {
         console.log(Auth.base_url + route, this.access_token)
+        const res = await fetch(Auth.base_url + route, {
+            method: 'GET',
+            headers: {"Authorization": "bearer " + this.access_token}, "User-agent": "redditech",
+        })
+        // console.log("inside")
+        // todo : refresh si token expired
+        const data = res.json()
+        if (data.error)
+            throw data.message;
+
+        return data;
+    }
+
+    async testRequest(route) {
+        console.log(Auth.test_url + route, this.access_token)
         const res = await fetch(Auth.base_url + route, {
             method: 'GET',
             headers: {"Authorization": "bearer " + this.access_token}, "User-agent": "redditech",
