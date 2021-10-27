@@ -1,7 +1,17 @@
 import * as React from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import {makeRedirectUri, useAuthRequest} from 'expo-auth-session';
-import {Button, StyleSheet, View, FlatList, Text, Image, TouchableOpacity, SafeAreaView, ScrollView} from 'react-native';
+import {
+    Button,
+    StyleSheet,
+    View,
+    FlatList,
+    Text,
+    Image,
+    TouchableOpacity,
+    SafeAreaView,
+    ScrollView
+} from 'react-native';
 import {useEffect, useState} from 'react';
 import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -10,7 +20,8 @@ import Auth from './API.js'
 import './global.js'
 import {SearchBar} from 'react-native-elements';
 import {Searchbar} from 'react-native-paper';
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import {Ionicons, MaterialIcons} from "@expo/vector-icons";
+import {Search} from "./src/Search";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -37,7 +48,9 @@ function Login({route, navigation}) {
     useEffect(() => {
         if (response?.type === 'success') {
             const {code} = response.params;
-            api.getAccessToken(code).then((token) => {navigation.navigate('Home')})
+            api.getAccessToken(code).then((token) => {
+                navigation.navigate('Home')
+            })
         }
     }, [response]);
 
@@ -46,7 +59,7 @@ function Login({route, navigation}) {
             <View style={styles.logo}>
                 <Image
                     source={require('./assets/reddit_logo.png')}
-                    />
+                />
             </View>
             <View style={styles.containerButton}>
                 <TouchableOpacity style={styles.button} onPress={() =>
@@ -71,6 +84,7 @@ function HomeScreen({route, navigation}) {
             <Searchbar
                 placeholder="Search"
                 onChangeText={onChangeSearch}
+                onIconPress={()=>navigation.navigate('Search', {searchQuery: searchQuery})}
                 value={searchQuery}
             />
             <Text>
@@ -90,36 +104,37 @@ function AccountScreen({route}) {
     useEffect(() => {
         if (isFocused)
             api.makeRequest('me').then(data => {
-            setData(data)
-        })
-    },[isFocused]);
+                setData(data)
+            })
+    }, [isFocused]);
     // setData
     console.log(data);
     console.log(data.subscribers)
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={{ alignSelf: "center" }}>
+                <View style={{alignSelf: "center"}}>
                     <View style={styles.profileImage}>
-                        <Image source={{uri: data.icon_img.replace(/&amp;/g, "&")}} style={styles.image} resizeMode="cover"></Image>
+                        <Image source={{uri: data.icon_img.replace(/&amp;/g, "&")}} style={styles.image}
+                               resizeMode="cover"></Image>
                     </View>
                     <View style={styles.active}></View>
                 </View>
                 <View style={styles.infoContainer}>
-                    <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{data.name}</Text>
-                    <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>Reddit</Text>
+                    <Text style={[styles.text, {fontWeight: "200", fontSize: 36}]}>{data.name}</Text>
+                    <Text style={[styles.text, {color: "#AEB5BC", fontSize: 14}]}>Reddit</Text>
                 </View>
                 <View style={styles.statsContainer}>
                     <View style={styles.statsBox}>
-                        <Text style={[styles.text, { fontSize: 24 }]}>{data.coins}</Text>
+                        <Text style={[styles.text, {fontSize: 24}]}>{data.coins}</Text>
                         <Text style={[styles.text, styles.subText]}>Coins</Text>
                     </View>
-                    <View style={[styles.statsBox, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
-                        <Text style={[styles.text, { fontSize: 24 }]}>{data.total_karma}</Text>
+                    <View style={[styles.statsBox, {borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1}]}>
+                        <Text style={[styles.text, {fontSize: 24}]}>{data.total_karma}</Text>
                         <Text style={[styles.text, styles.subText]}>Karma</Text>
                     </View>
                     <View style={styles.statsBox}>
-                        <Text style={[styles.text, { fontSize: 24 }]}>{data.num_friends}</Text>
+                        <Text style={[styles.text, {fontSize: 24}]}>{data.num_friends}</Text>
                         <Text style={[styles.text, styles.subText]}>Friends</Text>
                     </View>
                 </View>
@@ -136,38 +151,39 @@ export default function App() {
     return (
         <NavigationContainer>
             <Tab.Navigator
-                  screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => {
+                screenOptions={({route}) => ({
+                    tabBarIcon: ({focused, color, size}) => {
                         if (route.name === 'Home') {
                             return (
                                 <Ionicons
-                                    name={ focused ? 'ios-information-circle' : 'ios-information-circle-outline'}
+                                    name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'}
                                     size={size}
                                     color={color}
                                 />);
                         } else if (route.name === 'Account') {
                             return (
                                 <Ionicons
-                                name={'ios-list'}
-                                size={size}
-                                color={color}
+                                    name={'ios-list'}
+                                    size={size}
+                                    color={color}
                                 />);
                         } else if (route.name === 'Login') {
                             return (
                                 <Ionicons
-                                name={'log-in-outline'}
-                                size={size}
-                                color={color}
+                                    name={'log-in-outline'}
+                                    size={size}
+                                    color={color}
                                 />);
                         }
                     },
                     tabBarInactiveTintColor: 'gray',
                     tabBarActiveTintColor: 'tomato',
-                  })}
-                >
+                })}
+            >
                 <Tab.Screen name="Login" component={Login} initialParams={{api: API}}/>
                 <Tab.Screen name="Home" component={HomeScreen} initialParams={{api: API}}/>
                 <Tab.Screen name="Account" component={AccountScreen} initialParams={{api: API}}/>
+                <Tab.Screen name="Search" component={Search} initialParams={{api: API}}/>
             </Tab.Navigator>
         </NavigationContainer>
     );
@@ -226,20 +242,20 @@ const styles = StyleSheet.create({
         width: 300,
         height: 300,
     },
-    containerButton:{
+    containerButton: {
         marginTop: 200,
         margin: 10
     },
-    button:{
+    button: {
         borderRadius: 10,
         padding: 10,
         backgroundColor: '#FF4500',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    buttonText:{
+    buttonText: {
         fontSize: 23,
-        top:  '-10%',
+        top: '-10%',
         color: 'white',
         fontWeight: 'bold',
     },
