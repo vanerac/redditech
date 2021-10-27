@@ -1,6 +1,7 @@
 export class PostPreview extends React.Component {
     constructor(props) {
         super(props);
+        this.api = props.data
         this.data = props.data
         this.subreddit = props.data.subreddit_name_prefixed
         this.title = props.data.title
@@ -80,6 +81,7 @@ export class Post extends React.Component {
     }
 
     async sendComment(string) {
+        // todo juste une popup, te fait pas chier
         let formData = new FormData();
         formData.append('thing_id', this.post_id)
         formData.append('text', string)
@@ -97,7 +99,7 @@ export class Post extends React.Component {
         return res; // surement inutile
     }
 
-    async upvote() {
+    async upVote() {
         let formData = new FormData();
         formData.append('id', this.post_id)
         formData.append('dir', 1)
@@ -159,10 +161,12 @@ export class Post extends React.Component {
 
     render() {
         /*Todo:
-            - Display title
-            - Display desc
-            - Display Media
-            - Display Comments (new class ??)
+            - Display title => this.title
+            - Display desc => this.desc
+            - Display Media => this.mediaType & this.mediaValue
+            - Display Plusieurs images ?? (pas encore dans le this)
+            ----------
+            - Display Comments (new component ??)
             - Handle Upvote, Downvote & unvote
             - handle new comment
         */

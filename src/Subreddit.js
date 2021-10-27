@@ -1,6 +1,7 @@
 export class Subreddit extends React.Component {
     constructor(props) {
         super(props);
+        this.api = props.data
         this.displayName = props.data.display_name
         this.prefixedName = props.data.display_name_prefixed
 
@@ -53,6 +54,11 @@ export class Subreddit extends React.Component {
             this.setState(this.state)
         }
         return res; // surement inutile
+    }
+
+    changeSort(option) {
+        // todo
+        //  fetch all subreddit data with sort options
     }
 
     componentDidMount() {
