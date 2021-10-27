@@ -75,8 +75,13 @@ function Login({route, navigation}) {
 function HomeScreen({route, navigation}) {
 
     const [searchQuery, setSearchQuery] = React.useState('');
+    const {api} = route.params;
 
-    const onChangeSearch = query => setSearchQuery(query);
+    const onChangeSearch = query => {
+        setSearchQuery(query)
+        api.makeRequest('https://www.reddit.com/search.json?q=hello').then(console.log)
+        //
+    };
     console.log(searchQuery)
 
     return (
@@ -84,7 +89,7 @@ function HomeScreen({route, navigation}) {
             <Searchbar
                 placeholder="Search"
                 onChangeText={onChangeSearch}
-                onIconPress={()=>navigation.navigate('Search', {searchQuery: searchQuery})}
+                onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}
                 value={searchQuery}
             />
             <Text>
@@ -106,7 +111,7 @@ function AccountScreen({route}) {
 
     useEffect(() => {
         if (isFocused)
-            api.makeRequest('v1/me').then(data => {
+            api.makeRequest('https://oauth.reddit.com/api/v1/me').then(data => {
             setData(data)
             setDescription(data.subreddit.public_description)
             // console.log(data.subreddit.public_description)
