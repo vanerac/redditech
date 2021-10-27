@@ -16,11 +16,14 @@ export function Search({route, navigation}) {
     const t = ['hour', 'day', 'week', 'month', 'year', 'all']
 
 
+
+    // todo: auto complete https://www.reddit.com/dev/api/#GET_api_subreddit_autocomplete_v2
+
     const onChangeSearch = query => {
         // restrict_sr=false&limit=10&
         api.makeRequest('r/all/hot' /*+ encodeURIComponent(query)*/).then(data => {
             setData(data)
-            console.log(data)
+
         })
         setSearchQuery(query)
     };
