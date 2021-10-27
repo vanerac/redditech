@@ -57,7 +57,8 @@ export default class Auth {
     }
 
     async makeRequest(route) {
-        console.log(Auth.base_url + route, this.access_token)
+        console.log(Auth.base_url + route)
+
         const res = await fetch(Auth.base_url + route, {
             method: 'GET',
             headers: {"Authorization": "bearer " + this.access_token}, "User-agent": "redditech",
