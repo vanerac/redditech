@@ -1,4 +1,4 @@
-export class PostPreview extends React.Component {
+export class PostCard extends React.Component {
     constructor(props) {
         super(props);
         this.api = props.data
@@ -11,6 +11,8 @@ export class PostPreview extends React.Component {
         this.mediaValue = undefined;
         this.post_id = props.data.name
         this.desc = props.data.selftext
+        this.authorName = props.data.author
+        this.authorId = props.data.author_fullname
 
         this.mediaType = undefined
         switch (props.data.post_hint) {
@@ -34,6 +36,7 @@ export class PostPreview extends React.Component {
     }
 
     render() {
+        // todo
         return (
             null
         )
@@ -54,6 +57,8 @@ export class Post extends React.Component {
         this.score = props.data.score
         this.mediaValue = undefined;
         this.post_id = props.data.name
+
+        // todo author name
 
         this.state = {
             upVote: 0, // -1, 0 ou 1
@@ -156,7 +161,7 @@ export class Post extends React.Component {
     }
 
     componentDidMount() {
-
+        // todo fetch comments
     }
 
     render() {
@@ -165,6 +170,7 @@ export class Post extends React.Component {
             - Display desc => this.desc
             - Display Media => this.mediaType & this.mediaValue
             - Display Plusieurs images ?? (pas encore dans le this)
+            - Display Comment list
             ----------
             - Display Comments (new component ??)
             - Handle Upvote, Downvote & unvote
