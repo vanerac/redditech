@@ -40,7 +40,7 @@ function Login({route, navigation}) {
     const [request, response, promptAsync] = useAuthRequest(
         {
             clientId: 'e3t0ixFSw5lrApAqVPrGMA',
-            scopes: ['identity'],
+            scopes: Auth.scopes,
             redirectUri: makeRedirectUri({
                 native: 'myapp://redirect',
             }),

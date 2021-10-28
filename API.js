@@ -9,7 +9,23 @@ export default class Auth {
 
     static redirect_uri = 'exp://127.0.0.1:19000';
     static client_id = 'e3t0ixFSw5lrApAqVPrGMA'
-    static scopes = ['*']
+    static scopes = [
+        'creddits', 'modcontributors',
+        'modmail', 'modconfig',
+        'subscribe', 'structuredstyles',
+        'vote', 'wikiedit',
+        'mysubreddits', 'submit',
+        'modlog', 'modposts',
+        'modflair', 'save',
+        'modothers', 'read',
+        'privatemessages', 'report',
+        'identity', 'livemanage',
+        'account', 'modtraffic',
+        'wikiread', 'edit',
+        'modwiki', 'modself',
+        'history', 'flair'
+    ]
+
     static url = {
         authorizationEndpoint: 'https://www.reddit.com/api/v1/authorize.compact',
         tokenEndpoint: 'https://www.reddit.com/api/v1/access_token',
@@ -32,7 +48,7 @@ export default class Auth {
         return formData;
     }
 
-     async getAccessToken(auth_code) {
+    async getAccessToken(auth_code) {
 
         if (!auth_code)
             throw 'No Auth Code'
@@ -57,12 +73,12 @@ export default class Auth {
     async makeRequest(url) {
         console.log('Fetching on', url)
 
-        const res = await fetch(url , {
+        const res = await fetch(url, {
             method: 'GET',
-             headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
+            headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
             "User-agent": "redditech",
         })
-        const data = res.json()
+        const data = await res.json()
         if (data.error)
             throw data.message;
 
@@ -71,31 +87,36 @@ export default class Auth {
 
     async postRequest(url) {
         console.log('Fetching on', url)
-    
-        const res = await fetch(url , {
+
+        const res = await fetch(url, {
             method: 'POST',
-             headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
+            headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
             "User-agent": "redditech",
         })
-        const data = res.json()
+        const data = await res.json()
         if (data.error)
             throw data.message;
-    
+
         return data;
     }
 
-    async patchRequest(url) {
+    async patchRequest(url, body) {
         console.log('Fetching on', url)
-    
-        const res = await fetch(url , {
+        console.log(body)
+        const res = await fetch(url, {
             method: 'PATCH',
-             headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
+            headers: url.includes('oauth') ? {
+                "Authorization": "bearer " + this.access_token, Accept: 'application/json',
+                'Content-Type': 'application/json',
+            } : undefined,
             "User-agent": "redditech",
+            body: JSON.stringify(body)
         })
-        const data = res.json()
+        const data = await res.json()
         if (data.error)
             throw data.message;
-    
+
+
         return data;
     }
 }

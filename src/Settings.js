@@ -20,66 +20,68 @@ export function Settings({route, navigation}) {
     const {api} = route.params;
     const [data, setData] = useState({})
     const isFocused = useIsFocused();
-    console.log("repasse dedans")
+
+
+    let [isEnabledPM, setIsEnabledPM] = useState(false);
+    let [isEnabledCR, setIsEnabledCR] = useState(false);
+    let [isEnabledUSF, setIsEnabledUSF] = useState(false);
+    let [isEnabledCRY, setIsEnabledCRY] = useState(false);
+    let [isEnabledUM, setIsEnabledUM] = useState(false);
+    let [isEnabledPR, setIsEnabledPR] = useState(false);
 
     useEffect(() => {
         if (isFocused)
             api.makeRequest('https://oauth.reddit.com/api/v1/me/prefs').then(data => {
                 setData(data)
-                // setDescription(data.subreddit.public_description)
-                // console.log(data.subreddit.public_description)
-                // console.log(test.public_description);
-                // console.log(data)
+                setIsEnabledPM(data.email_private_message);
+                setIsEnabledCR(data.email_chat_request);
+                setIsEnabledUSF(data.email_user_new_follower);
+                setIsEnabledCRY(data.email_comment_reply);
+                setIsEnabledUM(data.email_username_mention);
+                setIsEnabledPR(data.email_post_reply);
         })
     }, [isFocused]);
-    // email_private_message
-    // email_chat_request
-    // email_user_new_follower
-    // email_comment_reply
-    // email_username_mention
-    // email_post_reply
-    console.log(`here => `, typeof data.email_comment_reply)
 
-    const [isEnabledPM, setIsEnabledPM] = useState(data.email_private_message);
-    const [isEnabledCR, setIsEnabledCR] = useState(data.email_chat_request);
-    const [isEnabledUSF, setIsEnabledUSF] = useState(data.email_user_new_follower);
-    const [isEnabledCRY, setIsEnabledCRY] = useState(data.email_comment_reply);
-    const [isEnabledUM, setIsEnabledUM] = useState(data.email_username_mention);
-    const [isEnabledPR, setIsEnabledPR] = useState(data.email_post_reply);
 
-    // if (data.email_private_message == true)
-    //     setIsEnabledPM(true)
-    // else
-    //     setIsEnabledPM(false)
 
-    console.log(`la ->`, isEnabledCRY)
-
-    const toggleSwitchPM = () => {
+    const toggleSwitchPM = async () => {
+        data.email_private_message = !isEnabledPM;
+        await api.patchRequest('https://oauth.reddit.com/api/v1/me/prefs', data);
         setIsEnabledPM(previousState => !previousState)
         console.log("setIsEnabledPM")
     };
 
-    const toggleSwitchCR = () => {
+    const toggleSwitchCR = async () => {
+        data.email_chat_request = !isEnabledCR
+        await api.patchRequest('https://oauth.reddit.com/api/v1/me/prefs', data);
         setIsEnabledCR(previousState => !previousState)
         console.log("setIsEnabledCR")
     };
 
-    const toggleSwitchUSF = () => {
+    const toggleSwitchUSF = async () => {
+        data.email_user_new_follower = !isEnabledUSF
+        await api.patchRequest('https://oauth.reddit.com/api/v1/me/prefs', data);
         setIsEnabledUSF(previousState => !previousState)
         console.log("setIsEnabledUSF")
     };
 
-    const toggleSwitchCRY = () => {
+    const toggleSwitchCRY = async () => {
+        data.email_comment_reply = !isEnabledCRY
+        await api.patchRequest('https://oauth.reddit.com/api/v1/me/prefs', data);
         setIsEnabledCRY(previousState => !previousState)
         console.log("setIsEnabledCRY")
     };
 
-    const toggleSwitchdUM = () => {
+    const toggleSwitchdUM = async () => {
+        data.email_username_mention = !isEnabledUM
+        await api.patchRequest('https://oauth.reddit.com/api/v1/me/prefs', data);
         setIsEnabledUM(previousState => !previousState)
         console.log("setIsEnabledUM")
     };
 
-    const toggleSwitchPR = () => {
+    const toggleSwitchPR = async () => {
+        data.email_post_reply = !isEnabledPR
+        await api.patchRequest('https://oauth.reddit.com/api/v1/me/prefs', data);
         setIsEnabledPR(previousState => !previousState)
         console.log("setIsEnabledPR")
     };
@@ -253,10 +255,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1
     },
-    button: {
-        width: 300,
-        height: 300,
-    },
+    // button: {
+    //     width: 300,
+    //     height: 300,
+    // },
     containerButton: {
         marginTop: 200,
         margin: 10
