@@ -17,7 +17,6 @@ import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Auth from './API.js'
-import './global.js'
 
 import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {Search} from "./src/Search";
@@ -30,8 +29,6 @@ import {Home} from "./src/Home.js"
 WebBrowser.maybeCompleteAuthSession();
 
 const API = new Auth();
-
-// const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
