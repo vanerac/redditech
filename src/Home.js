@@ -19,6 +19,7 @@ import {useEffect, useState} from 'react';
 import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 import {SearchBar} from 'react-native-elements';
 import {Searchbar} from 'react-native-paper';
+import {PostCard} from "./Post";
 
 export function Home({route, navigation}) {
 
@@ -33,6 +34,7 @@ export function Home({route, navigation}) {
     };
 
     //default value
+
     async function fetchData(sort='best') {
         const data = await api.makeRequest('https://www.reddit.com/.json?sort=' + sort);
         const new_posts = data.data.children.filter(p => p.kind === 't3').map(p => p.data);
@@ -41,8 +43,15 @@ export function Home({route, navigation}) {
         setPosts(new_posts);
         setSubs(new_subs);
 
+        // console.log(new_posts)
     }
-    console.log(searchQuery)
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused)
+            fetchData()
+    },[isFocused]);
 
     return (
         <View>
@@ -52,8 +61,16 @@ export function Home({route, navigation}) {
                 onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}
                 value={searchQuery}
             />
-            <Text>
-            </Text>
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
+            <PostCard api={api} data={posts[0]} />
         </View>
     );
 }

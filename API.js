@@ -2,9 +2,9 @@ import {encode} from "base-64"
 
 export default class Auth {
     constructor() {
-        this.auth_code = undefined;
-        this.access_token = undefined;
-        this.refresh_token = undefined;
+        auth_code = undefined;
+        access_token = undefined;
+        refresh_token = undefined;
     }
 
     static redirect_uri = 'exp://127.0.0.1:19000';
@@ -62,7 +62,7 @@ export default class Auth {
         });
         const json = await res.json();
         // todo : ya des truc a garder ici
-        this.access_token = await json.access_token;
+        access_token = await json.access_token;
         return json;
     }
 
@@ -75,7 +75,7 @@ export default class Auth {
 
         const res = await fetch(url, {
             method: 'GET',
-            headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
+            headers: url.includes('oauth') ? {"Authorization": "bearer " + access_token} : undefined,
             "User-agent": "redditech",
         })
         const data = await res.json()
@@ -90,7 +90,7 @@ export default class Auth {
 
         const res = await fetch(url, {
             method: 'POST',
-            headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
+            headers: url.includes('oauth') ? {"Authorization": "bearer " + access_token} : undefined,
             "User-agent": "redditech",
         })
         const data = await res.json()
@@ -106,7 +106,7 @@ export default class Auth {
         const res = await fetch(url, {
             method: 'PATCH',
             headers: url.includes('oauth') ? {
-                "Authorization": "bearer " + this.access_token, Accept: 'application/json',
+                "Authorization": "bearer " + access_token, Accept: 'application/json',
                 'Content-Type': 'application/json',
             } : undefined,
             "User-agent": "redditech",
