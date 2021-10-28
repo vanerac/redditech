@@ -1,7 +1,7 @@
 export class Subreddit extends React.Component {
     constructor(props) {
         super(props);
-        this.api = props.data
+        this.api = props.api
         this.displayName = props.data.display_name
         this.prefixedName = props.data.display_name_prefixed
 

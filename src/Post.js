@@ -1,7 +1,7 @@
 export class PostCard extends React.Component {
     constructor(props) {
         super(props);
-        this.api = props.data
+        this.api = props.api
         this.data = props.data
         this.subreddit = props.data.subreddit_name_prefixed
         this.title = props.data.title
