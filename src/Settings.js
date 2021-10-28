@@ -21,7 +21,6 @@ export function Settings({route, navigation}) {
     const [data, setData] = useState({})
     const isFocused = useIsFocused();
 
-
     let [isEnabledPM, setIsEnabledPM] = useState(false);
     let [isEnabledCR, setIsEnabledCR] = useState(false);
     let [isEnabledUSF, setIsEnabledUSF] = useState(false);
@@ -255,10 +254,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1
     },
-    // button: {
-    //     width: 300,
-    //     height: 300,
-    // },
     containerButton: {
         marginTop: 200,
         margin: 10

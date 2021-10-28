@@ -1,7 +1,3 @@
-// todo recuperer les subreddits du mec
-//  recueprer les posts,
-//  ajouter un tri
-
 import * as React from 'react';
 import {
     Button,
@@ -17,32 +13,51 @@ import {
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import {NavigationContainer, useIsFocused} from '@react-navigation/native';
-import {SearchBar} from 'react-native-elements';
-import {Searchbar} from 'react-native-paper';
+import {makeRedirectUri, useAuthRequest} from 'expo-auth-session';
+import Auth from '../API.js'
 
-export function Home({route, navigation}) {
+const url = {
+    authorizationEndpoint: 'https://www.reddit.com/api/v1/authorize.compact',
+    tokenEndpoint: 'https://www.reddit.com/api/v1/access_token',
+};
 
-    const [searchQuery, setSearchQuery] = React.useState('');
+export function Login({route, navigation}) {
     const {api} = route.params;
+    const [request, response, promptAsync] = useAuthRequest(
+        {
+            clientId: 'e3t0ixFSw5lrApAqVPrGMA',
+            scopes: Auth.scopes,
+            redirectUri: makeRedirectUri({
+                native: 'myapp://redirect',
+            }),
+        },
+        url
+    );
 
-    const onChangeSearch = query => {
-        setSearchQuery(query)
-        api.makeRequest('https://www.reddit.com/search.json?q=hello').then(console.log)
-        //
-    };
-    console.log(searchQuery)
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const {code} = response.params;
+            api.getAccessToken(code).then((token) => {
+                navigation.navigate('Home')
+            })
+        }
+    }, [response]);
 
     return (
-        <View>
-            <Searchbar
-                placeholder="Search"
-                onChangeText={onChangeSearch}
-                onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}
-                value={searchQuery}
-            />
-            <Text>
-            </Text>
-        </View>
+        <SafeAreaView>
+            <View style={styles.logo}>
+                <Image
+                    source={require('./../assets/reddit_logo.png')}
+                />
+            </View>
+            <View style={styles.containerButton}>
+                <TouchableOpacity style={styles.button} onPress={() =>
+                    promptAsync()
+                }>
+                    <Text style={styles.buttonText}>Login</Text>
+                </TouchableOpacity>
+            </View>
+        </SafeAreaView>
     );
 }
 

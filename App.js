@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as WebBrowser from 'expo-web-browser';
-import {makeRedirectUri, useAuthRequest} from 'expo-auth-session';
 import {
     Button,
     StyleSheet,
@@ -19,155 +18,23 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Auth from './API.js'
 import './global.js'
-import {SearchBar} from 'react-native-elements';
-import {Searchbar} from 'react-native-paper';
+
 import {Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {Search} from "./src/Search";
 import {Settings} from "./src/Settings"
+import {AccountScreen} from "./src/Account.js"
+import {Login} from "./src/Login.js"
 // import {styles} from './style/style.js'
+import {Home} from "./src/Home.js"
 
 WebBrowser.maybeCompleteAuthSession();
 
 const API = new Auth();
 
-const url = {
-    authorizationEndpoint: 'https://www.reddit.com/api/v1/authorize.compact',
-    tokenEndpoint: 'https://www.reddit.com/api/v1/access_token',
-};
-
-function Login({route, navigation}) {
-    const {api} = route.params;
-    const [request, response, promptAsync] = useAuthRequest(
-        {
-            clientId: 'e3t0ixFSw5lrApAqVPrGMA',
-            scopes: Auth.scopes,
-            redirectUri: makeRedirectUri({
-                native: 'myapp://redirect',
-            }),
-        },
-        url
-    );
-
-    useEffect(() => {
-        if (response?.type === 'success') {
-            const {code} = response.params;
-            api.getAccessToken(code).then((token) => {
-                navigation.navigate('Home')
-            })
-        }
-    }, [response]);
-
-    return (
-        <SafeAreaView>
-            <View style={styles.logo}>
-                <Image
-                    source={require('./assets/reddit_logo.png')}
-                />
-            </View>
-            <View style={styles.containerButton}>
-                <TouchableOpacity style={styles.button} onPress={() =>
-                    promptAsync()
-                }>
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
-    );
-}
-
-function HomeScreen({route, navigation}) {
-
-    const [searchQuery, setSearchQuery] = React.useState('');
-    const {api} = route.params;
-
-    const onChangeSearch = query => {
-        setSearchQuery(query)
-        api.makeRequest('https://www.reddit.com/search.json?q=hello').then(console.log)
-        //
-    };
-    console.log(searchQuery)
-
-    return (
-        <View>
-            <Searchbar
-                placeholder="Search"
-                onChangeText={onChangeSearch}
-                onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}
-                value={searchQuery}
-            />
-            <Text>
-            </Text>
-        </View>
-    );
-}
-
-function AccountScreen({route}) {
-    const [data, setData] = useState({
-        "icon_img": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/2048px-Solid_white.svg.png"
-        // "public_description": "tmp"
-    });
-
-    const [description, setDescription] = useState();
-    const {api} = route.params;
-
-    const isFocused = useIsFocused();
-
-    useEffect(() => {
-        if (isFocused)
-            api.makeRequest('https://oauth.reddit.com/api/v1/me').then(data => {
-            setData(data)
-            setDescription(data.subreddit.public_description)
-            // console.log(data.subreddit.public_description)
-            // console.log(test.public_description);
-        })
-    },[isFocused]);
-    // setData
-    // console.log(`here =>`, data.icon_img);
-    // console.log(`here2 =>`, data.public_description);
-    // console.log(data)
-    // console.log(data.subscribers)
-    return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={{alignSelf: "center"}}>
-                    <View style={styles.profileImage}>
-                        <Image source={{uri: data.icon_img.replace(/&amp;/g, "&")}} style={styles.image}
-                               resizeMode="cover"></Image>
-                    </View>
-                    <View style={styles.active}></View>
-                </View>
-                <View style={styles.infoContainer}>
-                    <Text style={[styles.text, {fontWeight: "200", fontSize: 36}]}>{data.name}</Text>
-                    <Text style={[styles.text, {color: "#AEB5BC", fontSize: 14}]}>Reddit</Text>
-                </View>
-                <View style={styles.statsContainer}>
-                    <View style={styles.statsBox}>
-                        <Text style={[styles.text, {fontSize: 24}]}>{data.coins}</Text>
-                        <Text style={[styles.text, styles.subText]}>Coins</Text>
-                    </View>
-                    <View style={[styles.statsBox, {borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1}]}>
-                        <Text style={[styles.text, {fontSize: 24}]}>{data.total_karma}</Text>
-                        <Text style={[styles.text, styles.subText]}>Karma</Text>
-                    </View>
-                    <View style={styles.statsBox}>
-                        <Text style={[styles.text, {fontSize: 24}]}>{data.num_friends}</Text>
-                        <Text style={[styles.text, styles.subText]}>Friends</Text>
-                    </View>
-                </View>
-                <View style={styles.infoContainer}>
-                    <Text style={[styles.text, { color: "#AEB5BC", fontSize: 20, margin: 20 }]}>Profile Description :</Text>
-                    <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{description}</Text>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
-}
-
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-
     return (
         <NavigationContainer>
             <Tab.Navigator
@@ -208,7 +75,7 @@ export default function App() {
                 })}
             >
                 <Tab.Screen name="Login" component={Login} initialParams={{api: API}}/>
-                <Tab.Screen name="Home" component={HomeScreen} initialParams={{api: API}}/>
+                <Tab.Screen name="Home" component={Home} initialParams={{api: API}}/>
                 <Tab.Screen name="Account" component={AccountScreen} initialParams={{api: API}}/>
                 <Tab.Screen name="Settings" component={Settings} initialParams={{api: API}}/>
                 <Tab.Screen name="Search" component={Search} initialParams={{api: API}}/>
