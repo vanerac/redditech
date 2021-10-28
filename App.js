@@ -79,12 +79,24 @@ function HomeScreen({route, navigation}) {
 
     const [searchQuery, setSearchQuery] = React.useState('');
     const {api} = route.params;
+    let [posts, setPosts] = useState([])
+    let [subs, setSubs] = useState([])
 
     const onChangeSearch = query => {
         setSearchQuery(query)
         api.makeRequest('https://www.reddit.com/search.json?q=hello').then(console.log)
-        //
     };
+
+    //default value
+    async function fetchData(sort='best') {
+        const data = await api.makeRequest('https://www.reddit.com/.json?sort=' + sort);
+        const new_posts = data.data.children.filter(p => p.kind === 't3').map(p => p.data);
+        const new_subs = data.data.children.filter(p => p.kind === 't5').map(p => p.data);
+
+        setPosts(new_posts);
+        setSubs(new_subs);
+
+    }
     console.log(searchQuery)
 
     return (

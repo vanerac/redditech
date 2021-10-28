@@ -102,7 +102,7 @@ export default class Auth {
 
     async patchRequest(url, body) {
         console.log('Fetching on', url)
-        console.log(body)
+        // console.log(body)
         const res = await fetch(url, {
             method: 'PATCH',
             headers: url.includes('oauth') ? {
