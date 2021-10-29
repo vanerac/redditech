@@ -1,24 +1,14 @@
-import {
-    StyleSheet,
-    View,
-    FlatList,
-    Text,
-    Image,
-    TouchableOpacity,
-    SafeAreaView,
-    ScrollView,
-    Switch
-} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import * as React from 'react'
-import { ListItem, Button, Icon } from 'react-native-elements'
-import { Video, AVPlaybackStatus } from 'expo-av';
+import {useState} from 'react'
+import {Video} from 'expo-av';
 
 export function PostCard(props) {
 
     const {api, data} = props
 
     if (!data) {
-        return  (
+        return (
             <View>
                 <Text>
                     {'buffer'}
@@ -46,7 +36,7 @@ export function PostCard(props) {
             break;
         case 'image':
             mediaType = 'image';
-            mediaValue=data.url// todo
+            mediaValue = data.url// todo
             break;
         case 'self':
             mediaType = 'self'
@@ -79,15 +69,27 @@ export function PostCard(props) {
 }
 
 function displayBar(props) {
-    if (props.type == 'video'){
+    if (props.type == 'video') {
         const video = React.useRef(null);
         const [status, setStatus] = React.useState({});
         return (
-            <View style={{ borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10, marginBottom: 10}}/>
-                  )
+            <View style={{
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                marginRight: 10,
+                marginLeft: 10,
+                marginBottom: 10
+            }}/>
+        )
     } else if (props.type == 'image') {
         return (
-            <View style={{ borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10, marginBottom: 10}}/>
+            <View style={{
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                marginRight: 10,
+                marginLeft: 10,
+                marginBottom: 10
+            }}/>
         )
     } else {
         return (
@@ -97,7 +99,7 @@ function displayBar(props) {
 }
 
 function RenderURL(props) {
-    if (props.type == 'video'){
+    if (props.type == 'video') {
         const video = React.useRef(null);
         const [status, setStatus] = React.useState({});
         return (
@@ -106,14 +108,14 @@ function RenderURL(props) {
                 ref={video}
                 style={styles.video}
                 source={{
-                  uri: props.value,
+                    uri: props.value,
                 }}
                 useNativeControls
                 resizeMode="contain"
                 isLooping
                 onPlaybackStatusUpdate={status => setStatus(() => status)}
             />
-                  )
+        )
     } else if (props.type == 'image') {
         return (
             <Image source={{uri: props.value}} style={{height: 350, borderRadius: 15, margin: 10}}/>
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         elevation: 3,
         backgroundColor: '#fff',
-        shadowOffset: { width: 1, height: 1},
+        shadowOffset: {width: 1, height: 1},
         shadowColor: '#333',
         shadowOpacity: 0.3,
         shadowRadius: 2,
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
         height: 200,
         borderRadius: 15,
         margin: 10,
-      },
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -157,146 +159,157 @@ const styles = StyleSheet.create({
     },
 })
 
-// export class Post extends React.Component {
-//     // kind t3
-//
-//     constructor(props) {
-//         super(props);
-//         api = props.api
-//         data = props.data
-//         subreddit = props.data.subreddit_name_prefixed
-//         title = props.data.title
-//         ups = props.data.ups
-//         downs = props.data.downs
-//         score = props.data.score
-//         mediaValue = undefined;
-//         post_id = props.data.name
-//
-//         // todo author name
-//
-//         state = {
-//             upVote: 0, // -1, 0 ou 1
-//             comments: [] // list des id
-//         }
-//
-//         setState(state)
-//
-//         mediaType = undefined
-//         switch (props.data.post_hint) {
-//             case 'hosted:video':
-//                 mediaType = 'video';
-//                 mediaValue = props.data.media.reddit_video.scrubber_media_url
-//                 break;
-//             case 'image':
-//                 mediaType = 'image';
-//                 mediaValue;
-//                 props.data.url// todo
-//                 break;
-//             case 'self':
-//                 mediaType = 'self'
-//                 mediaValue = props.data.selftext
-//                 break;
-//         }
-//
-//     }
-//
-//     async sendComment(string) {
-//         // todo juste une popup, te fait pas chier
-//         let formData = new FormData();
-//         formData.append('thing_id', post_id)
-//         formData.append('text', string)
-//         const url = 'https://oauth.reddit.com/api/comment'
-//         let res = await fetch(url, {
-//             method: 'POST',
-//             headers: {"Authorization": "bearer " + api.access_token},
-//             "User-agent": "redditech",
-// body: formData
-//         })
-//         res = await res.json()
-//         if (!res.error) {
-//             state.comments.push(res);
-//             setState(state)
-//         }
-//         return res; // surement inutile
-//     }
-//
-//     async upVote() {
-//         let formData = new FormData();
-//         formData.append('id', post_id)
-//         formData.append('dir', 1)
-//         const url = 'https://oauth.reddit.com/api/vote'
-//         let res = await fetch(url, {
-//             method: 'POST',
-//             headers: {"Authorization": "bearer " + api.access_token},
-//             "User-agent": "redditech",
-// body: formData
-//         })
-//         res = await res.json()
-//         if (!res.error) {
-//             state.upVote = 1
-//             setState(state)
-//         }
-//
-//         return res; // surement inutile
-//     }
-//
-//     async downVote() {
-//         let formData = new FormData();
-//         formData.append('id', post_id)
-//         formData.append('dir', -1)
-//         const url = 'https://oauth.reddit.com/api/vote'
-//         let res = await fetch(url, {
-//             method: 'POST',
-//             headers: {"Authorization": "bearer " + api.access_token},
-//             "User-agent": "redditech",
-// body: formData
-//         })
-//         res = await res.json()
-//         if (!res.error) {
-//             state.upVote = -1
-//             setState(state)
-//         }
-//         return res; // surement inutile
-//
-//     }
-//
-//     async unVote() {
-//         let formData = new FormData();
-//         formData.append('id', post_id)
-//         formData.append('dir', 0)
-//         const url = 'https://oauth.reddit.com/api/vote'
-//         let res = await fetch(url, {
-//             method: 'POST',
-//             headers: {"Authorization": "bearer " + api.access_token},
-//             "User-agent": "redditech",
-// body: formData
-//         })
-//         res = await res.json()
-//         if (!res.error) {
-//             state.upVote = 0
-//             setState(state)
-//         }
-//         return res; // surement inutile
-//     }
-//
-//     componentDidMount() {
-//         // todo fetch comments
-//     }
-//
-//     render() {
-//         /*Todo:
-//             - Display title => title
-//             - Display desc => desc
-//             - Display Media => mediaType & mediaValue
-//             - Display Plusieurs images ?? (pas encore dans le this)
-//             - Display Comment list
-//             ----------
-//             - Display Comments (new component ??)
-//             - Handle Upvote, Downvote & unvote
-//             - handle new comment
-//         */
-//
-//         return (null)
-//
-//     }
-// }
+export function Post({navigation}) {
+    // kind t3
+
+    const {api, data} = props
+
+    if (!data) {
+        return (
+            <View>
+                <Text>
+                    {'buffer'}
+                </Text>
+            </View>
+        )
+    }
+    let [sort, setSort] = useState('best')
+    let [comments, setComments] = useState([])
+
+    const subreddit = data.subreddit_name_prefixed
+    const url = data.url
+    const title = data.title
+    const ups = data.ups
+    const downs = data.downs
+    const score = data.score
+    let mediaValue = undefined;
+    const post_id = data.name
+    const id = data.id
+    const desc = data.selftext
+    const authorName = data.author
+    const authorId = data.author_fullname
+
+    let mediaType = undefined
+    switch (data.post_hint) {
+        case 'hosted:video':
+            mediaType = 'video';
+            mediaValue = data.media.reddit_video.scrubber_media_url
+            break;
+        case 'image':
+            mediaType = 'image';
+            mediaValue = data.url// todo
+            break;
+        case 'self':
+            mediaType = 'self'
+            mediaValue = data.selftext
+            break;
+    }
+
+
+    async function sendComment(string) {
+        // todo juste une popup, te fait pas chier
+        let formData = new FormData();
+        formData.append('thing_id', post_id)
+        formData.append('text', string)
+        const url = 'https://oauth.reddit.com/api/comment'
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {"Authorization": "bearer " + api.access_token},
+            "User-agent": "redditech",
+            body: formData
+        })
+        res = await res.json()
+        if (!res.error) {
+            state.comments.push(res);
+            setState(state)
+        }
+        return res; // surement inutile
+    }
+
+    async function upVote() {
+        let formData = new FormData();
+        formData.append('id', post_id)
+        formData.append('dir', 1)
+        const url = 'https://oauth.reddit.com/api/vote'
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {"Authorization": "bearer " + api.access_token},
+            "User-agent": "redditech",
+            body: formData
+        })
+        res = await res.json()
+        if (!res.error) {
+            state.upVote = 1
+            setState(state)
+        }
+
+        return res; // surement inutile
+    }
+
+    async function downVote() {
+        let formData = new FormData();
+        formData.append('id', post_id)
+        formData.append('dir', -1)
+        const url = 'https://oauth.reddit.com/api/vote'
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {"Authorization": "bearer " + api.access_token},
+            "User-agent": "redditech",
+            body: formData
+        })
+        res = await res.json()
+        if (!res.error) {
+            state.upVote = -1
+            setState(state)
+        }
+        return res; // surement inutile
+
+    }
+
+    async function unVote() {
+        let formData = new FormData();
+        formData.append('id', post_id)
+        formData.append('dir', 0)
+        const url = 'https://oauth.reddit.com/api/vote'
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {"Authorization": "bearer " + api.access_token},
+            "User-agent": "redditech",
+            body: formData
+        })
+        res = await res.json()
+        if (!res.error) {
+            state.upVote = 0
+            setState(state)
+        }
+        return res; // surement inutile
+    }
+
+    async function changeSort(new_sort) {
+        setSort(new_sort)
+    }
+
+    async function fetchComments() {
+        const data = await api.makeRequest(`https://www.reddit.com/${subreddit}/${id}.json?sort=${sort}`);
+        setComments(data.data.children.map(v => v.data))
+
+    }
+
+    // todo fetch comments
+
+    /*Todo:
+        - Display title => title
+        - Display desc => desc
+        - Display Media => mediaType & mediaValue
+        - Display Plusieurs images ?? (pas encore dans le this)
+        - Display Comment list
+        ----------
+        - Display Comments (new component ??)
+        - Handle Upvote, Downvote & unvote
+        - handle new comment
+    */
+
+    return undefined;
+
+
+}

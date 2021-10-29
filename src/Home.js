@@ -3,21 +3,9 @@
 //  ajouter un tri
 
 import * as React from 'react';
-import {
-    Button,
-    StyleSheet,
-    View,
-    FlatList,
-    Text,
-    Image,
-    TouchableOpacity,
-    SafeAreaView,
-    ScrollView,
-    Switch
-} from 'react-native';
 import {useEffect, useState} from 'react';
-import {NavigationContainer, useIsFocused} from '@react-navigation/native';
-import {SearchBar} from 'react-native-elements';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {Searchbar} from 'react-native-paper';
 import {PostCard} from "./Post";
 
@@ -50,7 +38,9 @@ export function Home({route, navigation}) {
 
     useEffect(() => {
         if (isFocused)
-            fetchData()
+            fetchData().then(
+                // navigation.push()
+            )
     },[isFocused]);
 
     return (
@@ -65,7 +55,12 @@ export function Home({route, navigation}) {
                 />
                 {posts.map(element => {
                     return (
-                        <PostCard api={api} data={element} key={Math.random()}/>
+                        <PostCard
+                            onClick={() => console.log('clicked')}
+                            style={{cursor: 'pointer'}}
+                            api={api}
+                            data={element}
+                            key={Math.random()}/>
                     )
                 })}
             </ScrollView>

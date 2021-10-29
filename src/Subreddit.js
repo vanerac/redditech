@@ -1,7 +1,8 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {Image, StyleSheet, Switch, Text, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Switch, Text, View} from "react-native";
 import {useIsFocused} from "@react-navigation/native";
+import {PostCard} from "./Post";
 
 export function SubredditCard(props) {
     const api = props.api
@@ -14,7 +15,7 @@ export function SubredditCard(props) {
     const bannerURL = data.banner_img
     const iconURL = data.icon_img
     const headerURL = data.header_img
-    const public_desc = data.public_description
+    const short_desc = data.public_description
     const desc = data.description
     const subscriberCount = data.subscribers
     const createdAt = data.created_utc
@@ -102,7 +103,7 @@ export function SubredditCard(props) {
                 />
             </Text>
 
-            <Text>{public_desc}</Text>
+            <Text>{short_desc}</Text>
             <View style={{borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10}}/>
         </View>
     )
@@ -110,41 +111,49 @@ export function SubredditCard(props) {
 
 export function Subreddit({route, navigation}) {
 
-    const {api, data} = route.params
+    const api = props.api
+    const data = props.data
+
     const displayName = data.display_name
     const prefixedName = data.display_name_prefixed
 
+    const url = data.url
     const post_id = data.name
     const bannerURL = data.banner_img
     const iconURL = data.icon_img
     const headerURL = data.header_img
+    const short_desc = data.public_description
     const desc = data.description
     const subscriberCount = data.subscribers
     const createdAt = data.created_utc
-    const is_subed = data.user_is_subscriber
+    // const is_subed =
 
-    let [isSubbed, setSub] = useState(0);
-    setSub(is_subed);
+    let [is_subed, setSub] = useState(false)
+    let [sort, setSort] = useState('best')
+    let [posts, setPosts] = useState([])
+    const isFocused = useIsFocused();
 
-    // const state = {
-    //     is_subed: is_subed
-    // }
-    //
-    // setState(state);
+    useEffect(() => {
+        setSub(data.user_is_subscriber);
+        fetchPosts().then(() => {
+        });
+    }, [isFocused])
 
 
     async function subscribeTo() {
         let formData = new FormData();
-        formData.append('sr_name', post_id)
+        formData.append('sr', post_id)
         formData.append('action', 'sub')
         const url = 'https://oauth.reddit.com/api/subscribe'
         let res = await fetch(url, {
             method: 'POST',
             headers: {"Authorization": "bearer " + api.access_token},
             "User-agent": "redditech",
-            body: formData
+            body: formData,
+            Accept: 'application/json'
         })
-        res = await res.json()
+        console.log(await res.text())
+        // res = await res.json()
         setSub(!is_subed)
 
         return res; // surement inutile
@@ -153,7 +162,7 @@ export function Subreddit({route, navigation}) {
 
     async function unsubscribeTo() {
         let formData = new FormData();
-        formData.append('sr_name', post_id)
+        formData.append('sr', post_id)
         formData.append('action', 'unsub')
         const url = 'https://oauth.reddit.com/api/subscribe'
         let res = await fetch(url, {
@@ -162,25 +171,61 @@ export function Subreddit({route, navigation}) {
             "User-agent": "redditech",
             body: formData
         })
-        res = await res.json()
+
+        // res = await res.json()
         setSub(!is_subed)
 
         return res; // surement inutile
     }
 
-    function changeSort(option) {
-        // todo
-        //  fetch all subreddit data with sort options
+    async function toggleSubscription() {
+
+        if (is_subed) {
+            await unsubscribeTo();
+        } else {
+            await subscribeTo()
+        }
     }
 
-    // componentDidMount() {
-    //     // todo fetch display posts
-    //     //  https://www.reddit.com/r/python.json
-    // }
-    //
-    // render() {}
+    async function fetchPosts() {
+        const res = await api.makeRequest('https://oauth.reddit.com' + url + sort + '.json')
 
-    return undefined;
+        setPosts(res.data.children.map(v => v.data));
+    }
+
+
+    let i = 0;
+
+    /* todo
+    *   display subreddit infos
+    *   add subreddit interactions
+    *
+    *  */
+
+
+    return (
+        <View>
+
+            {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
+            <ScrollView>
+                {/*<Searchbar*/}
+                {/*    placeholder="Search"*/}
+                {/*    onChangeText={onChangeSearch}*/}
+                {/*    onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}*/}
+                {/*    value={searchQuery}*/}
+                {/*/>*/}
+                {posts.map(element => {
+                    return (
+                        <PostCard
+                            style={{cursor: 'pointer'}}
+                            api={api}
+                            data={element}
+                            key={i++}/>
+                    )
+                })}
+            </ScrollView>
+        </View>
+    );
 
 }
 
