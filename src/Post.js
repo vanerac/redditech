@@ -110,6 +110,7 @@ export function PostCard(props) {
             </Text>
             <RenderURL type={mediaType} value={mediaValue}></RenderURL>
             <View style={styles.statsContainer}>
+                <Text>{ups}</Text>
                 <IconButton
                     icon={postVote === 1 ? "thumb-up" : "thumb-up-outline"}
                     color={Colors.red500}
@@ -123,6 +124,7 @@ export function PostCard(props) {
                     size={30}
                     onPress={() => toggleSwitchVoteDown()}
                 />
+                <Text>{downs}</Text>
             </View>
         </View>
     )
