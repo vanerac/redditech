@@ -80,7 +80,7 @@ export function SubredditCard(props) {
             <Text>
                 <Image
                     source={{
-                        uri: iconURL
+                        uri: iconURL || 'https://b.thumbs.redditmedia.com/voAwqXNBDO4JwIODmO4HXXkUJbnVo_mL_bENHeagDNo.png'
                     }}
                     style={{width: 30, height: 30, borderRadius: 30 / 2}}
                 />

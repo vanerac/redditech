@@ -53,7 +53,6 @@ export function Home({route, navigation}) {
             fetchData()
     },[isFocused]);
 
-    let i = 0;
     return (
         <View>
             {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
@@ -66,7 +65,7 @@ export function Home({route, navigation}) {
                 />
                 {posts.map(element => {
                     return (
-                        <PostCard api={api} data={element} key={i++}/>
+                        <PostCard api={api} data={element} key={Math.random()}/>
                     )
                 })}
             </ScrollView>

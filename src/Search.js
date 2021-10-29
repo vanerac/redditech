@@ -13,8 +13,6 @@ export function Search({route, navigation}) {
     const [newSeachQuery, setSearchQuery] = React.useState('');
     const [autoCompleteVals, setAutoComplete] = React.useState([]);
 
-
-    console.log('searchQuery', searchQuery)
     // todo be able to change tome and sort
     const sort = ['relevance', 'hot', 'top', 'new', 'comments'];
     const t = ['hour', 'day', 'week', 'month', 'year', 'all']
@@ -46,7 +44,7 @@ export function Search({route, navigation}) {
     //         })
     // });
 
-    let i = 0;
+    // let i = 0;
 
     return (
         <View>
@@ -59,9 +57,9 @@ export function Search({route, navigation}) {
             <ScrollView>
                 {autoCompleteVals.map(v => {
                     if (v.kind === 't3')
-                        return (<PostCard api={api} data={v.data} key={i++}/>)
+                        return (<PostCard api={api} data={v.data} key={Math.random()}/>)
                     else if (v.kind === 't5')
-                        return (<SubredditCard api={api} data={v.data} key={i++}/>)
+                        return (<SubredditCard api={api} data={v.data} key={Math.random()}/>)
                 })}
             </ScrollView>
         </View>
