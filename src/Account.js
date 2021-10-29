@@ -25,20 +25,22 @@ export function AccountScreen({route}) {
 
     const isFocused = useIsFocused();
 
+
+    async function getSubreddits() {
+        let subs = await api.makeRequest('https://oauth.reddit.com/subreddits/mine.json')
+        return subs.data.children.map(v => v.data);
+    }
+
     useEffect(() => {
-        if (isFocused)
+        if (isFocused) {
+            getSubreddits() // todo
             api.makeRequest('https://oauth.reddit.com/api/v1/me').then(data => {
-            setData(data)
-            setDescription(data.subreddit.public_description)
-            // console.log(data.subreddit.public_description)
-            // console.log(test.public_description);
-        })
-    },[isFocused]);
-    // setData
-    // console.log(`here =>`, data.icon_img);
-    // console.log(`here2 =>`, data.public_description);
-    // console.log(data)
-    // console.log(data.subscribers)
+                setData(data)
+                setDescription(data.subreddit.public_description)
+            })
+        }
+
+    }, [isFocused]);
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -68,8 +70,9 @@ export function AccountScreen({route}) {
                     </View>
                 </View>
                 <View style={styles.infoContainer}>
-                    <Text style={[styles.text, { color: "#AEB5BC", fontSize: 20, margin: 20 }]}>Profile Description :</Text>
-                    <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{description}</Text>
+                    <Text style={[styles.text, {color: "#AEB5BC", fontSize: 20, margin: 20}]}>Profile Description
+                        :</Text>
+                    <Text style={[styles.text, {fontWeight: "200", fontSize: 36}]}>{description}</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
