@@ -53,6 +53,7 @@ export function Home({route, navigation}) {
             fetchData()
     },[isFocused]);
 
+    let i = 0;
     return (
         <View>
             {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
@@ -68,7 +69,7 @@ export function Home({route, navigation}) {
                     // console.log("inside map array")
                     // console.log(element);
                     return (
-                        <PostCard api={api} data={element} />
+                        <PostCard api={api} data={element} key={i++}/>
                     )
                 })}
                 {/* <PostCard api={api} data={posts[0]} />

@@ -16,7 +16,6 @@ import { ListItem, Button, Icon } from 'react-native-elements'
 export function PostCard(props) {
 
     const {api, data} = props
-    console.log(props)
 
     if (!data) {
         return  (
