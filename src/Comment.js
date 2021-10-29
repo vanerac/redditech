@@ -1,5 +1,6 @@
+import * as React from "react";
 import {useState} from "react";
-import {View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 
 export function CommentCard(props) {
     // kind t1
@@ -104,11 +105,46 @@ export function CommentCard(props) {
     //  Upvote/downvote
 
     return (
-        <View>
+        <View style={styles.card}>
+            <Text style={[styles.text, {fontSize: 15}]}>
+                {authorName}
+            </Text>
             <Text>
-                {}
+                {body}
             </Text>
         </View>
     );
 
 }
+
+const styles = StyleSheet.create({
+    card: {
+        borderRadius: 15,
+        elevation: 3,
+        backgroundColor: '#fff',
+        shadowOffset: {width: 1, height: 1},
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        marginHorizontal: 4,
+        margin: 10,
+    },
+    text: {
+        margin: 15,
+        fontFamily: "HelveticaNeue",
+        color: "#52575D",
+        // fontSize: 20,
+    },
+    video: {
+        alignSelf: 'center',
+        width: 320,
+        height: 200,
+        borderRadius: 15,
+        margin: 10,
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: '#ecf0f1',
+    },
+})

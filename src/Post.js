@@ -1,7 +1,9 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import * as React from 'react'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {Video} from 'expo-av';
+import {CommentCard} from "./Comment";
+import {useIsFocused} from "@react-navigation/native";
 
 export function PostCard(props) {
 
@@ -286,9 +288,22 @@ export function Post({route, navigation}) {
         setSort(new_sort)
     }
 
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused)
+            fetchComments();
+    }, [isFocused])
+
     async function fetchComments() {
-        const data = await api.makeRequest(`https://www.reddit.com/${subreddit}/${id}.json?sort=${sort}`);
-        setComments(data.data.children.map(v => v.data))
+        let data = await api.makeRequest(`https://www.reddit.com/${subreddit}/${id}.json?sort=${sort}`);
+
+        // console.log(data.find(v => {
+        //     v.data.children.some(d => d.type === 't3')
+        // }).data.children.map(v => v.data))
+        // console.log()
+
+        setComments(data.map(v => v.data.children).flat(1).filter(v => v.kind === 't1').map(v => v.data))
 
     }
 
@@ -307,7 +322,14 @@ export function Post({route, navigation}) {
     */
 
     return (<View>
-        <Text>{title}</Text>
+        <ScrollView>
+            <Text>{title}</Text>
+            {comments.map(comment => {
+                return (
+                    <CommentCard data={comment} api={api} key={Math.random()}/>
+                )
+            })}
+        </ScrollView>
     </View>);
 
 
