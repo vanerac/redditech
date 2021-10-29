@@ -3,15 +3,16 @@ import * as React from 'react'
 import {useEffect, useState} from 'react'
 import {Video} from 'expo-av';
 import {CommentCard} from "./Comment";
-import {useIsFocused} from "@react-navigation/native";
-import {Ionicons, MaterialIcons} from "@expo/vector-icons";
-import { IconButton, Colors, Button } from 'react-native-paper';
-import {NavigationContainer, useIsFocused} from '@react-navigation/native';
+import {Colors, IconButton} from 'react-native-paper';
+import {useIsFocused} from '@react-navigation/native';
 
 export function PostCard(props) {
 
     const {api, data} = props
 
+    let [isVoteUp, setIsVoteUp] = useState(false);
+    let [isVoteDown, setIsVoteDown] = useState(false);
+    const isFocused = useIsFocused();
     if (!data) {
         return (
             <View>
@@ -21,6 +22,8 @@ export function PostCard(props) {
             </View>
         )
     }
+
+    const vote = data.likes === true ? 1 : data.likes === false ? 2 : 0;
 
     const subreddit = data.subreddit_name_prefixed
     const title = data.title
@@ -49,14 +52,34 @@ export function PostCard(props) {
             break;
     }
 
+    useEffect(() => {
+        if (isFocused) {
+            if (vote == 1)
+                setIsVoteUp(1)
+            else if (vote == -1)
+                setIsVoteDown(1)
+        }
+    }, [isFocused]);
 
-    async function fetchComments() {
-    }
+    const toggleSwitchVoteUP = async () => {
+        setIsVoteUp(previousState => !previousState)
+        if (isVoteDown)
+            setIsVoteDown(previousState => !previousState)
+        upVote(post_id, api)
+        console.log("isVoteUp")
+    };
+
+    const toggleSwitchVoteDown = async () => {
+        setIsVoteDown(previousState => !previousState)
+        if (isVoteUp)
+            setIsVoteUp(previousState => !previousState)
+        downVote(post_id, api)
+        console.log("isVoteDown")
+    };
+
 
     return (
-
         <View style={styles.card}>
-
             <Text style={[styles.text, {fontSize: 15}]}>
                 {`Made by `}
                 {authorName}
@@ -65,9 +88,69 @@ export function PostCard(props) {
                 {"\n"}{"\n"}
                 {title}
             </Text>
-            <RenderURL type={mediaType} value={mediaValue}/>
+            <RenderURL type={mediaType} value={mediaValue}></RenderURL>
+            <View style={styles.statsContainer}>
+                <IconButton
+                    icon={isVoteUp ? "thumb-up" : "thumb-up-outline"}
+                    color={Colors.red500}
+                    size={30}
+                    onPress={() => toggleSwitchVoteUP()}
+                />
+                {/* {ups} */}
+                <IconButton
+                    icon={isVoteDown ? "thumb-down" : "thumb-down-outline"}
+                    color={Colors.red500}
+                    size={30}
+                    onPress={() => toggleSwitchVoteDown()}
+                />
+            </View>
         </View>
     )
+}
+
+async function upVote(post_id, api) {
+    let formData = new FormData();
+    formData.append('id', post_id)
+    formData.append('dir', 1)
+    const url = 'https://oauth.reddit.com/api/vote'
+    let res = await fetch(url, {
+        method: 'POST',
+        headers: {"Authorization": "bearer " + api.access_token},
+        "User-agent": "redditech",
+        body: formData
+    })
+    res = await res.json()
+    return res // surement inutile
+}
+
+async function downVote(post_id, api) {
+    let formData = new FormData();
+    formData.append('id', post_id)
+    formData.append('dir', -1)
+    const url = 'https://oauth.reddit.com/api/vote'
+    let res = await fetch(url, {
+        method: 'POST',
+        headers: {"Authorization": "bearer " + api.access_token},
+        "User-agent": "redditech",
+        body: formData
+    })
+    res = await res.json()
+    return res // surement inutile
+}
+
+async function unVote(props) {
+    let formData = new FormData();
+    formData.append('id', post_id)
+    formData.append('dir', 0)
+    const url = 'https://oauth.reddit.com/api/vote'
+    let res = await fetch(url, {
+        method: 'POST',
+        headers: {"Authorization": "bearer " + api.access_token},
+        "User-agent": "redditech",
+        body: formData
+    })
+    res = await res.json()
+    return res // surement inutile
 }
 
 function displayBar(props) {
@@ -159,6 +242,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#ecf0f1',
     },
+    statsContainer: {
+        flexDirection: "row",
+        alignSelf: "center",
+        marginTop: 32
+    },
 })
 
 export function Post({route, navigation}) {
@@ -228,72 +316,21 @@ export function Post({route, navigation}) {
         return res; // surement inutile
     }
 
-    async function upVote() {
-        let formData = new FormData();
-        formData.append('id', post_id)
-        formData.append('dir', 1)
-        const url = 'https://oauth.reddit.com/api/vote'
-        let res = await fetch(url, {
-            method: 'POST',
-            headers: {"Authorization": "bearer " + api.access_token},
-            "User-agent": "redditech",
-            body: formData
-        })
-        res = await res.json()
-        if (!res.error) {
-            state.upVote = 1
-            setState(state)
-        }
-
-        return res; // surement inutile
-    }
-
-    async function downVote() {
-        let formData = new FormData();
-        formData.append('id', post_id)
-        formData.append('dir', -1)
-        const url = 'https://oauth.reddit.com/api/vote'
-        let res = await fetch(url, {
-            method: 'POST',
-            headers: {"Authorization": "bearer " + api.access_token},
-            "User-agent": "redditech",
-            body: formData
-        })
-        res = await res.json()
-        if (!res.error) {
-            state.upVote = -1
-            setState(state)
-        }
-        return res; // surement inutile
-
-    }
-
-    async function unVote() {
-        let formData = new FormData();
-        formData.append('id', post_id)
-        formData.append('dir', 0)
-        const url = 'https://oauth.reddit.com/api/vote'
-        let res = await fetch(url, {
-            method: 'POST',
-            headers: {"Authorization": "bearer " + api.access_token},
-            "User-agent": "redditech",
-            body: formData
-        })
-        res = await res.json()
-        if (!res.error) {
-            state.upVote = 0
-            setState(state)
-        }
-        return res; // surement inutile
-    }
-
     async function changeSort(new_sort) {
         setSort(new_sort)
     }
 
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused)
+            fetchComments();
+    }, [isFocused])
+
     async function fetchComments() {
-        const data = await api.makeRequest(`https://www.reddit.com/${subreddit}/${id}.json?sort=${sort}`);
-        setComments(data.data.children.map(v => v.data))
+        let data = await api.makeRequest(`https://www.reddit.com/${subreddit}/${id}.json?sort=${sort}`);
+
+        setComments(data.map(v => v.data.children).flat(1).filter(v => v.kind === 't1').map(v => v.data))
 
     }
 
@@ -312,7 +349,14 @@ export function Post({route, navigation}) {
     */
 
     return (<View>
-        <Text>{title}</Text>
+        <ScrollView>
+            <Text>{title}</Text>
+            {comments.map(comment => {
+                return (
+                    <CommentCard data={comment} api={api} key={Math.random()}/>
+                )
+            })}
+        </ScrollView>
     </View>);
 
 
