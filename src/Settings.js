@@ -41,8 +41,6 @@ export function Settings({route, navigation}) {
         })
     }, [isFocused]);
 
-
-
     const toggleSwitchPM = async () => {
         data.email_private_message = !isEnabledPM;
         await api.patchRequest('https://oauth.reddit.com/api/v1/me/prefs', data);
