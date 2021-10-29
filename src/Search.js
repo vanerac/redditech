@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
+import * as React from "react";
+import {useState} from "react";
 import {useIsFocused} from "@react-navigation/native";
 import {Searchbar} from "react-native-paper";
-import * as React from "react";
-import {ScrollView, Text, View} from "react-native";
+import {ScrollView, TouchableOpacity, View} from "react-native";
 import {PostCard} from "./Post";
-import { SubredditCard} from "./Subreddit";
+import {SubredditCard} from "./Subreddit";
 
 export function Search({route, navigation}) {
     const {api, searchQuery} = route.params;
@@ -55,11 +55,20 @@ export function Search({route, navigation}) {
                 value={newSeachQuery}
             />
             <ScrollView>
+
                 {autoCompleteVals.map(v => {
                     if (v.kind === 't3')
-                        return (<PostCard api={api} data={v.data} key={Math.random()}/>)
+                        return (
+                            <TouchableOpacity onPress={() => navigation.push('Post', {data: v.data, api: api})}>
+                                <PostCard api={api} data={v.data} key={Math.random()}/>
+                            </TouchableOpacity>
+                        )
                     else if (v.kind === 't5')
-                        return (<SubredditCard api={api} data={v.data} key={Math.random()}/>)
+                        return (
+                            <TouchableOpacity onPress={() => navigation.push('Subreddit', {data: v.data, api: api})}>
+                                <SubredditCard api={api} data={v.data} key={Math.random()}/>
+                            </TouchableOpacity>
+                        )
                 })}
             </ScrollView>
         </View>

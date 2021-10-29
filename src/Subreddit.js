@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {Image, ScrollView, StyleSheet, Switch, Text, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View} from "react-native";
 import {useIsFocused} from "@react-navigation/native";
 import {PostCard} from "./Post";
 
@@ -43,6 +43,7 @@ export function SubredditCard(props) {
         })
         console.log(await res.text())
         // res = await res.json()
+        data.user_is_subscriber = !is_subed;
         setSub(!is_subed)
 
         return res; // surement inutile
@@ -62,6 +63,7 @@ export function SubredditCard(props) {
         })
 
         // res = await res.json()
+        data.user_is_subscriber = !is_subed;
         setSub(!is_subed)
 
         return res; // surement inutile
@@ -111,8 +113,7 @@ export function SubredditCard(props) {
 
 export function Subreddit({route, navigation}) {
 
-    const api = props.api
-    const data = props.data
+    const {data, api} = route.params
 
     const displayName = data.display_name
     const prefixedName = data.display_name_prefixed
@@ -216,11 +217,14 @@ export function Subreddit({route, navigation}) {
                 {/*/>*/}
                 {posts.map(element => {
                     return (
-                        <PostCard
-                            style={{cursor: 'pointer'}}
-                            api={api}
-                            data={element}
-                            key={i++}/>
+                        <TouchableOpacity onPress={() => navigation.push('Post', {data: element, api: api})}>
+                            <PostCard
+                                style={{cursor: 'pointer'}}
+                                api={api}
+                                data={element}
+                                key={i++}/>
+                        </TouchableOpacity>
+
                     )
                 })}
             </ScrollView>

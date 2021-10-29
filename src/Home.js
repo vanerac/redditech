@@ -4,7 +4,7 @@
 
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {Searchbar} from 'react-native-paper';
 import {PostCard} from "./Post";
@@ -55,12 +55,15 @@ export function Home({route, navigation}) {
                 />
                 {posts.map(element => {
                     return (
-                        <PostCard
-                            onClick={() => console.log('clicked')}
-                            style={{cursor: 'pointer'}}
-                            api={api}
-                            data={element}
-                            key={Math.random()}/>
+                        <TouchableOpacity onPress={() => navigation.push('Post', {data: element, api: api})}>
+                            <PostCard
+                                onClick={() => console.log('clicked')}
+                                style={{cursor: 'pointer'}}
+                                api={api}
+                                data={element}
+                                key={Math.random()}/>
+                        </TouchableOpacity>
+
                     )
                 })}
             </ScrollView>

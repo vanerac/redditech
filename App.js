@@ -1,84 +1,92 @@
 import * as React from 'react';
 import * as WebBrowser from 'expo-web-browser';
-import {
-    Button,
-    StyleSheet,
-    View,
-    FlatList,
-    Text,
-    Image,
-    TouchableOpacity,
-    SafeAreaView,
-    ScrollView,
-    Switch
-} from 'react-native';
-import {useEffect, useState} from 'react';
-import {NavigationContainer, useIsFocused} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {StyleSheet} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Auth from './API.js'
 
-import {Ionicons, MaterialIcons} from "@expo/vector-icons";
+import {Ionicons} from "@expo/vector-icons";
 import {Search} from "./src/Search";
 import {Settings} from "./src/Settings"
 import {AccountScreen} from "./src/Account.js"
 import {Login} from "./src/Login.js"
 // import {styles} from './style/style.js'
 import {Home} from "./src/Home.js"
+import {createStackNavigator} from "@react-navigation/stack";
+import {Post} from "./src/Post";
+import {Subreddit} from "./src/Subreddit";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const API = new Auth();
-const Tab = createBottomTabNavigator();
+export function stackWrapper() {
 
-export default function App() {
+    const Tab = createBottomTabNavigator();
+
     return (
-        <NavigationContainer>
-            <Tab.Navigator
-                screenOptions={({route}) => ({
-                    tabBarIcon: ({focused, color, size}) => {
-                        if (route.name === 'Home') {
-                            return (
-                                <Ionicons
-                                    name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'}
-                                    size={size}
-                                    color={color}
-                                />);
-                        } else if (route.name === 'Account') {
-                            return (
-                                <Ionicons
+
+        <Tab.Navigator
+            screenOptions={({route}) => ({
+                tabBarIcon: ({focused, color, size}) => {
+                    if (route.name === 'Home') {
+                        return (
+                            <Ionicons
+                                name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'}
+                                size={size}
+                                color={color}
+                            />);
+                    } else if (route.name === 'Account') {
+                        return (
+                            <Ionicons
                                 name={'person-outline'}
                                 size={size}
                                 color={color}
-                                />);
-                        } else if (route.name === 'Login') {
-                            return (
-                                <Ionicons
-                                    name={'log-in-outline'}
-                                    size={size}
-                                    color={color}
-                                />);
-                        } else if (route.name === 'Settings') {
-                            return (
-                                <Ionicons
+                            />);
+                    } else if (route.name === 'Login') {
+                        return (
+                            <Ionicons
+                                name={'log-in-outline'}
+                                size={size}
+                                color={color}
+                            />);
+                    } else if (route.name === 'Settings') {
+                        return (
+                            <Ionicons
                                 name={'settings-outline'}
                                 size={size}
                                 color={color}
-                                />);
-                        }
-                    },
-                    tabBarInactiveTintColor: 'gray',
-                    tabBarActiveTintColor: 'tomato',
-                })}
-            >
-                <Tab.Screen name="Login" component={Login} initialParams={{api: API}}/>
-                <Tab.Screen name="Home" component={Home} initialParams={{api: API}}/>
-                <Tab.Screen name="Account" component={AccountScreen} initialParams={{api: API}}/>
-                <Tab.Screen name="Settings" component={Settings} initialParams={{api: API}}/>
-                <Tab.Screen name="Search" component={Search} initialParams={{api: API}}/>
-            </Tab.Navigator>
+                            />);
+                    }
+                },
+                tabBarInactiveTintColor: 'gray',
+                tabBarActiveTintColor: 'tomato',
+            })}
+        >
+            <Tab.Screen name="Login" component={(Login)} initialParams={{api: API}}/>
+            <Tab.Screen name="Home" component={(Home)} initialParams={{api: API}}/>
+            <Tab.Screen name="Account" component={(AccountScreen)}
+                        initialParams={{api: API}}/>
+            <Tab.Screen name="Settings" component={(Settings)} initialParams={{api: API}}/>
+            <Tab.Screen name="Search" component={(Search)} initialParams={{api: API}}/>
+        </Tab.Navigator>
+    )
+
+}
+
+const API = new Auth();
+
+
+export default function App() {
+    const Stack = createStackNavigator();
+
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen name='App' component={stackWrapper}/>
+                <Stack.Screen name="Post" component={(Post)} initialParams={{api: API}}/>
+                <Stack.Screen name="Subreddit" component={(Subreddit)} initialParams={{api: API}}/>
+            </Stack.Navigator>
         </NavigationContainer>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -137,10 +145,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1
     },
-    button: {
-        width: 300,
-        height: 300,
-    },
+    // button: {
+    //     width: 300,
+    //     height: 300,
+    // },
     containerButton: {
         marginTop: 200,
         margin: 10

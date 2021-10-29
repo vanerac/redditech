@@ -81,7 +81,9 @@ export function PostCard(props) {
     }
 
     return (
+
         <View style={styles.card}>
+
             <Text style={[styles.text, {fontSize: 15}]}>
                 {`Made by `}
                 {authorName}
@@ -251,10 +253,10 @@ const styles = StyleSheet.create({
     },
 })
 
-export function Post({navigation}) {
+export function Post({route, navigation}) {
     // kind t3
 
-    const {api, data} = props
+    const {data, api} = route.params
 
     if (!data) {
         return (
@@ -345,7 +347,9 @@ export function Post({navigation}) {
         - handle new comment
     */
 
-    return undefined;
+    return (<View>
+        <Text>{title}</Text>
+    </View>);
 
 
 }
