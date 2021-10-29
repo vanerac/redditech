@@ -90,7 +90,7 @@ export function SubredditCard(props) {
                     {' - '}
                     {subscriberCount}
                     {' Subscribers'}
-                    {'test'}
+                    {'         '}
                 </Text>
                 <Switch
                     trackColor={{false: "#767577", true: "#007bff"}}
@@ -98,7 +98,7 @@ export function SubredditCard(props) {
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSubscription}
                     value={is_subed}
-                    style={{width: 30, height: 30}}
+                    // style={{width: 30, height: 30}}
                 />
             </Text>
 

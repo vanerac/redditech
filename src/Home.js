@@ -36,7 +36,7 @@ export function Home({route, navigation}) {
     //default value
 
     async function fetchData(sort='best') {
-        const data = await api.makeRequest('https://www.reddit.com/.json?sort=' + sort);
+        const data = await api.makeRequest('https://oauth.reddit.com/.json?sort=' + sort);
         const new_posts = data.data.children.filter(p => p.kind === 't3').map(p => p.data);
         const new_subs = data.data.children.filter(p => p.kind === 't5').map(p => p.data);
 
