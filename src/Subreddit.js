@@ -13,6 +13,7 @@ export function SubredditCard(props) {
     const bannerURL = data.banner_img
     const iconURL = data.icon_img
     const headerURL = data.header_img
+    const public_desc = data.public_description
     const desc = data.description
     const subscriberCount = data.subscribers
     const createdAt = data.created_utc
@@ -21,6 +22,13 @@ export function SubredditCard(props) {
 
     return (
         <View style={styles.card}>
+            <Text>
+                <Image
+                    source={{
+                        uri: iconURL
+                    }}
+                    style={{width: 30, height: 30, borderRadius: 30 / 2}}
+                />
 
                 <Text style={[styles.text, {fontSize: 15}]}>
                     {prefixedName}
@@ -29,8 +37,10 @@ export function SubredditCard(props) {
                     {' Subscribers'}
                     {'test'}
                 </Text>
-                <Text>{desc}</Text>
-                <View style={{borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10}}/>
+            </Text>
+
+            <Text>{public_desc}</Text>
+            <View style={{borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10}}/>
         </View>
     )
 }
@@ -135,22 +145,22 @@ export function Subreddit({route, navigation}) {
 //
 // }
 
-const styles = StyleSheet.create({
-    card: {
-        borderRadius: 15,
-        elevation: 3,
-        backgroundColor: '#fff',
-        shadowOffset: {width: 1, height: 1},
-        shadowColor: '#333',
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        marginHorizontal: 4,
-        margin: 10,
-    },
-    text: {
-        margin: 15,
-        fontFamily: "HelveticaNeue",
-        color: "#52575D",
-        // fontSize: 20,
-    }
-})
+    const styles = StyleSheet.create({
+        card: {
+            borderRadius: 15,
+            elevation: 3,
+            backgroundColor: '#fff',
+            shadowOffset: {width: 1, height: 1},
+            shadowColor: '#333',
+            shadowOpacity: 0.3,
+            shadowRadius: 2,
+            marginHorizontal: 4,
+            margin: 10,
+        },
+        text: {
+            margin: 15,
+            fontFamily: "HelveticaNeue",
+            color: "#52575D",
+            // fontSize: 20,
+        }
+    })
