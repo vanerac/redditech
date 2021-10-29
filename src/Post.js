@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import * as React from 'react'
 import { ListItem, Button, Icon } from 'react-native-elements'
-// import {Card} from "./Card"
+import { Video, AVPlaybackStatus } from 'expo-av';
 
 export function PostCard(props) {
 
@@ -58,33 +58,7 @@ export function PostCard(props) {
     async function fetchComments() {
     }
 
-    // function renderURL(toDisplay) {
-    //     if (toDisplay == data.url)
-    //         return (
-    //             <Text>Display URL</Text>
-    //         )
-    //     else
-    //         return (
-    //             <Text>Do not display URL</Text>
-    //         )
-    // }
-
-    // let Image_Http_URL ={ uri: 'https://i.redd.it/award_images/t5_22cerq/5izbv4fn0md41_Wholesome.png'};
-
     return (
-        // <Card titleStyle={{textAlign: 'left'}}>
-        //     <Card.Title>{title}</Card.Title>
-        //     <Card.Divider/>
-        //     <Card.Image source={{uri: mediaValue}}>
-        //         {/* <Text style={{marginBottom: 10}}>
-        //             The idea with React Native Elements is more about component structure than actual design.
-        //         </Text> */}
-        //     {/* <Button
-        //       icon={<Icon name='code' color='#ffffff' />}
-        //       buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-        //       title='VIEW NOW' /> */}
-        //     </Card.Image>
-        // </Card>
         <View style={styles.card}>
             <Text style={[styles.text, {fontSize: 15}]}>
                 {`Made by `}
@@ -94,10 +68,61 @@ export function PostCard(props) {
                 {"\n"}{"\n"}
                 {title}
             </Text>
-            <View style={{ borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10}}/>
-            <Image source={{uri: mediaValue}} style={{height: 350, borderRadius: 15}}/>
+            <RenderURL type={mediaType} value={mediaValue}></RenderURL>
         </View>
+        // <View style={styles.container}>
+        // <View style={styles.card}>
+        //     <Text>okok</Text>
+        
+        // </View>
     )
+}
+
+function displayBar(props) {
+    if (props.type == 'video'){
+        const video = React.useRef(null);
+        const [status, setStatus] = React.useState({});
+        return (
+            <View style={{ borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10, marginBottom: 10}}/>
+                  )
+    } else if (props.type == 'image') {
+        return (
+            <View style={{ borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10, marginBottom: 10}}/>
+        )
+    } else {
+        return (
+            <Text></Text>
+        );
+    }
+}
+
+function RenderURL(props) {
+    if (props.type == 'video'){
+        const video = React.useRef(null);
+        const [status, setStatus] = React.useState({});
+        return (
+            // <View style={styles.container}>
+            <Video
+                ref={video}
+                style={styles.video}
+                source={{
+                  uri: props.value,
+                }}
+                useNativeControls
+                resizeMode="contain"
+                isLooping
+                onPlaybackStatusUpdate={status => setStatus(() => status)}
+            />
+                  )
+    } else if (props.type == 'image') {
+        return (
+            <Image source={{uri: props.value}} style={{height: 350, borderRadius: 15, margin: 10}}/>
+        )
+    } else {
+        return (
+            <Text></Text>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -117,7 +142,19 @@ const styles = StyleSheet.create({
         fontFamily: "HelveticaNeue",
         color: "#52575D",
         // fontSize: 20,
-    }
+    },
+    video: {
+        alignSelf: 'center',
+        width: 320,
+        height: 200,
+        borderRadius: 15,
+        margin: 10,
+      },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: '#ecf0f1',
+    },
 })
 
 // export class Post extends React.Component {
