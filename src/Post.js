@@ -49,7 +49,9 @@ export function PostCard(props) {
     }
 
     return (
+
         <View style={styles.card}>
+
             <Text style={[styles.text, {fontSize: 15}]}>
                 {`Made by `}
                 {authorName}
@@ -58,13 +60,8 @@ export function PostCard(props) {
                 {"\n"}{"\n"}
                 {title}
             </Text>
-            <RenderURL type={mediaType} value={mediaValue}></RenderURL>
+            <RenderURL type={mediaType} value={mediaValue}/>
         </View>
-        // <View style={styles.container}>
-        // <View style={styles.card}>
-        //     <Text>okok</Text>
-
-        // </View>
     )
 }
 
@@ -159,10 +156,10 @@ const styles = StyleSheet.create({
     },
 })
 
-export function Post({navigation}) {
+export function Post({route, navigation}) {
     // kind t3
 
-    const {api, data} = props
+    const {data, api} = route.params
 
     if (!data) {
         return (
@@ -309,7 +306,9 @@ export function Post({navigation}) {
         - handle new comment
     */
 
-    return undefined;
+    return (<View>
+        <Text>{title}</Text>
+    </View>);
 
 
 }
