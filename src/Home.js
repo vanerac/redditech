@@ -55,22 +55,33 @@ export function Home({route, navigation}) {
 
     return (
         <View>
-            <Searchbar
-                placeholder="Search"
-                onChangeText={onChangeSearch}
-                onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}
-                value={searchQuery}
-            />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
-            <PostCard api={api} data={posts[0]} />
+            {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
+            <ScrollView>
+                <Searchbar
+                    placeholder="Search"
+                    onChangeText={onChangeSearch}
+                    onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}
+                    value={searchQuery}
+                />
+                {posts.map(element => {
+                    // <Text>{element.title}</Text>
+                    // console.log("inside map array")
+                    // console.log(element);
+                    return (
+                        <PostCard api={api} data={element} />
+                    )
+                })}
+                {/* <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} />
+                <PostCard api={api} data={posts[0]} /> */}
+            </ScrollView>
         </View>
     );
 }

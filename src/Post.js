@@ -1,5 +1,4 @@
 import {
-    Button,
     StyleSheet,
     View,
     FlatList,
@@ -11,6 +10,8 @@ import {
     Switch
 } from 'react-native';
 import * as React from 'react'
+import { ListItem, Button, Icon } from 'react-native-elements'
+// import {Card} from "./Card"
 
 export function PostCard(props) {
 
@@ -58,15 +59,67 @@ export function PostCard(props) {
     async function fetchComments() {
     }
 
+    // function renderURL(toDisplay) {
+    //     if (toDisplay == data.url)
+    //         return (
+    //             <Text>Display URL</Text>
+    //         )
+    //     else
+    //         return (
+    //             <Text>Do not display URL</Text>
+    //         )
+    // }
+
+    // let Image_Http_URL ={ uri: 'https://i.redd.it/award_images/t5_22cerq/5izbv4fn0md41_Wholesome.png'};
+
     return (
-        <View>
-            <Text>
+        // <Card titleStyle={{textAlign: 'left'}}>
+        //     <Card.Title>{title}</Card.Title>
+        //     <Card.Divider/>
+        //     <Card.Image source={{uri: mediaValue}}>
+        //         {/* <Text style={{marginBottom: 10}}>
+        //             The idea with React Native Elements is more about component structure than actual design.
+        //         </Text> */}
+        //     {/* <Button
+        //       icon={<Icon name='code' color='#ffffff' />}
+        //       buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+        //       title='VIEW NOW' /> */}
+        //     </Card.Image>
+        // </Card>
+        <View style={styles.card}>
+            <Text style={[styles.text, {fontSize: 15}]}>
+                {`Made by `}
+                {authorName}
+                {` on subreddit `}
+                {subreddit}
+                {"\n"}{"\n"}
                 {title}
             </Text>
+            <View style={{ borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10}}/>
+            <Image source={{uri: mediaValue}} style={{height: 350, borderRadius: 15}}/>
         </View>
     )
-
 }
+
+const styles = StyleSheet.create({
+    card: {
+        borderRadius: 15,
+        elevation: 3,
+        backgroundColor: '#fff',
+        shadowOffset: { width: 1, height: 1},
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        marginHorizontal: 4,
+        margin: 10,
+    },
+    text: {
+        margin: 15,
+        fontFamily: "HelveticaNeue",
+        color: "#52575D",
+        // fontSize: 20,
+    }
+})
 
 // export class Post extends React.Component {
 //     // kind t3
