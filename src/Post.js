@@ -23,7 +23,7 @@ export function PostCard(props) {
         )
     }
 
-    const vote = data.likes === true ? 1 : data.likes === false ? 2 : 0;
+    let vote = data.likes === true ? 1 : data.likes === false ? 2 : 0;
 
     const subreddit = data.subreddit_name_prefixed
     const title = data.title
@@ -35,6 +35,8 @@ export function PostCard(props) {
     const desc = data.selftext
     const authorName = data.author
     const authorId = data.author_fullname
+
+    let [postVote, setPostVote] = useState(0);
 
     let mediaType = undefined
     switch (data.post_hint) {
@@ -54,27 +56,45 @@ export function PostCard(props) {
 
     useEffect(() => {
         if (isFocused) {
-            if (vote == 1)
-                setIsVoteUp(1)
-            else if (vote == -1)
-                setIsVoteDown(1)
+            setPostVote(vote)
+            // if (vote == 1)
+            //     setIsVoteUp(1)
+            // else if (vote == -1)
+            //     setIsVoteDown(1)
         }
     }, [isFocused]);
 
     const toggleSwitchVoteUP = async () => {
-        setIsVoteUp(previousState => !previousState)
-        if (isVoteDown)
-            setIsVoteDown(previousState => !previousState)
-        upVote(post_id, api)
-        console.log("isVoteUp")
+        // setIsVoteUp(previousState => !previousState)
+
+        if (postVote === 1) {
+            setPostVote(0)
+            unVote(post_id, api)
+        } else {
+            setPostVote(1)
+            upVote(post_id, api);
+        }
+
+        // if (isVoteDown)
+        //     setIsVoteDown(previousState => !previousState)
+        // upVote(post_id, api)
+
     };
 
     const toggleSwitchVoteDown = async () => {
-        setIsVoteDown(previousState => !previousState)
-        if (isVoteUp)
-            setIsVoteUp(previousState => !previousState)
-        downVote(post_id, api)
-        console.log("isVoteDown")
+        // setIsVoteDown(previousState => !previousState)
+        // if (isVoteUp)
+        //     setIsVoteUp(previousState => !previousState)
+        // downVote(post_id, api)
+
+        if (postVote === -1) {
+            setPostVote(0)
+            unVote(post_id, api)
+        } else {
+            setPostVote(-1)
+            downVote(post_id, api);
+        }
+
     };
 
 
@@ -91,14 +111,14 @@ export function PostCard(props) {
             <RenderURL type={mediaType} value={mediaValue}></RenderURL>
             <View style={styles.statsContainer}>
                 <IconButton
-                    icon={isVoteUp ? "thumb-up" : "thumb-up-outline"}
+                    icon={postVote === 1 ? "thumb-up" : "thumb-up-outline"}
                     color={Colors.red500}
                     size={30}
                     onPress={() => toggleSwitchVoteUP()}
                 />
                 {/* {ups} */}
                 <IconButton
-                    icon={isVoteDown ? "thumb-down" : "thumb-down-outline"}
+                    icon={postVote === -1 ? "thumb-down" : "thumb-down-outline"}
                     color={Colors.red500}
                     size={30}
                     onPress={() => toggleSwitchVoteDown()}
@@ -120,10 +140,12 @@ async function upVote(post_id, api) {
         body: formData
     })
     res = await res.json()
+    console.log('up voted')
     return res // surement inutile
 }
 
 async function downVote(post_id, api) {
+
     let formData = new FormData();
     formData.append('id', post_id)
     formData.append('dir', -1)
@@ -135,10 +157,11 @@ async function downVote(post_id, api) {
         body: formData
     })
     res = await res.json()
+    console.log('down voted')
     return res // surement inutile
 }
 
-async function unVote(props) {
+async function unVote(post_id, api) {
     let formData = new FormData();
     formData.append('id', post_id)
     formData.append('dir', 0)
@@ -150,6 +173,7 @@ async function unVote(props) {
         body: formData
     })
     res = await res.json()
+    console.log('un voted')
     return res // surement inutile
 }
 
