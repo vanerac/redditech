@@ -28,6 +28,7 @@ export function CommentCard(props) {
             method: 'POST',
             headers: {"Authorization": "bearer " + api.access_token},
             "User-agent": "redditech",
+            body: formData
         })
         res = await res.json()
         if (!res.error) {
@@ -47,6 +48,7 @@ export function CommentCard(props) {
             method: 'POST',
             headers: {"Authorization": "bearer " + api.access_token},
             "User-agent": "redditech",
+            body: formData
         })
         res = await res.json()
         if (!res.error) {
@@ -65,6 +67,7 @@ export function CommentCard(props) {
             method: 'POST',
             headers: {"Authorization": "bearer " + api.access_token},
             "User-agent": "redditech",
+            body: formData
         })
         res = await res.json()
         if (!res.error) {

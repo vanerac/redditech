@@ -20,12 +20,12 @@ export function Search({route, navigation}) {
     const t = ['hour', 'day', 'week', 'month', 'year', 'all']
 
     async function autoComplete(query) {
-        setSearchQuery(query)
         api.makeRequest(
             'https://oauth.reddit.com/api/subreddit_autocomplete_v2?include_profiles=false&limit=10&query='
             + encodeURI(query)).then(res => {
             setAutoComplete(res.data.children/*.map(v => v.data)*/)
         })
+        setSearchQuery(query)
     }
 
     // todo sort by

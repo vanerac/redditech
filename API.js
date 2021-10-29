@@ -2,9 +2,9 @@ import {encode} from "base-64"
 
 export default class Auth {
     constructor() {
-        auth_code = undefined;
-        access_token = undefined;
-        refresh_token = undefined;
+        this.auth_code = undefined;
+        this.access_token = undefined;
+        this.refresh_token = undefined;
     }
 
     static redirect_uri = 'exp://127.0.0.1:19000';
@@ -33,7 +33,7 @@ export default class Auth {
     };
 
     static buildForm(grant_type, code) {
-        var formData = new FormData();
+        let formData = new FormData();
         formData.append("redirect_uri", Auth.redirect_uri);
         if (grant_type === 'authorization_code') {
             formData.append("grant_type", "authorization_code");
@@ -62,7 +62,8 @@ export default class Auth {
         });
         const json = await res.json();
         // todo : ya des truc a garder ici
-        access_token = await json.access_token;
+        this.access_token = await json.access_token;
+        console.log('token:', json.access_token)
         return json;
     }
 
@@ -75,7 +76,7 @@ export default class Auth {
 
         const res = await fetch(url, {
             method: 'GET',
-            headers: url.includes('oauth') ? {"Authorization": "bearer " + access_token} : undefined,
+            headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
             "User-agent": "redditech",
         })
         const data = await res.json()
@@ -90,7 +91,7 @@ export default class Auth {
 
         const res = await fetch(url, {
             method: 'POST',
-            headers: url.includes('oauth') ? {"Authorization": "bearer " + access_token} : undefined,
+            headers: url.includes('oauth') ? {"Authorization": "bearer " + this.access_token} : undefined,
             "User-agent": "redditech",
         })
         const data = await res.json()
@@ -106,7 +107,7 @@ export default class Auth {
         const res = await fetch(url, {
             method: 'PATCH',
             headers: url.includes('oauth') ? {
-                "Authorization": "bearer " + access_token, Accept: 'application/json',
+                "Authorization": "bearer " + this.access_token, Accept: 'application/json',
                 'Content-Type': 'application/json',
             } : undefined,
             "User-agent": "redditech",

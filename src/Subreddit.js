@@ -1,6 +1,7 @@
-import {useState} from "react";
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import * as React from "react";
+import {useEffect, useState} from "react";
+import {Image, StyleSheet, Switch, Text, View} from "react-native";
+import {useIsFocused} from "@react-navigation/native";
 
 export function SubredditCard(props) {
     const api = props.api
@@ -17,8 +18,62 @@ export function SubredditCard(props) {
     const desc = data.description
     const subscriberCount = data.subscribers
     const createdAt = data.created_utc
-    const is_subed = data.user_is_subscriber
+    // const is_subed =
 
+    let [is_subed, setSub] = useState(false)
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        setSub(data.user_is_subscriber);
+    }, [isFocused])
+
+
+    async function subscribeTo() {
+        let formData = new FormData();
+        formData.append('sr', post_id)
+        formData.append('action', 'sub')
+        const url = 'https://oauth.reddit.com/api/subscribe'
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {"Authorization": "bearer " + api.access_token},
+            "User-agent": "redditech",
+            body: formData,
+            Accept: 'application/json'
+        })
+        console.log(await res.text())
+        // res = await res.json()
+        setSub(!is_subed)
+
+        return res; // surement inutile
+
+    }
+
+    async function unsubscribeTo() {
+        let formData = new FormData();
+        formData.append('sr', post_id)
+        formData.append('action', 'unsub')
+        const url = 'https://oauth.reddit.com/api/subscribe'
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: {"Authorization": "bearer " + api.access_token},
+            "User-agent": "redditech",
+            body: formData
+        })
+
+        // res = await res.json()
+        setSub(!is_subed)
+
+        return res; // surement inutile
+    }
+
+    async function toggleSubscription() {
+
+        if (is_subed) {
+            await unsubscribeTo();
+        } else {
+            await subscribeTo()
+        }
+    }
 
     return (
         <View style={styles.card}>
@@ -37,6 +92,14 @@ export function SubredditCard(props) {
                     {' Subscribers'}
                     {'test'}
                 </Text>
+                <Switch
+                    trackColor={{false: "#767577", true: "#007bff"}}
+                    thumbColor={is_subed ? "#f4f3f4" : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSubscription}
+                    value={is_subed}
+                    style={{width: 30, height: 30}}
+                />
             </Text>
 
             <Text>{public_desc}</Text>
@@ -79,9 +142,10 @@ export function Subreddit({route, navigation}) {
             method: 'POST',
             headers: {"Authorization": "bearer " + api.access_token},
             "User-agent": "redditech",
+            body: formData
         })
         res = await res.json()
-        setSub(is_subed)
+        setSub(!is_subed)
 
         return res; // surement inutile
 
@@ -96,9 +160,10 @@ export function Subreddit({route, navigation}) {
             method: 'POST',
             headers: {"Authorization": "bearer " + api.access_token},
             "User-agent": "redditech",
+            body: formData
         })
         res = await res.json()
-        setSub(is_subed)
+        setSub(!is_subed)
 
         return res; // surement inutile
     }
@@ -119,48 +184,22 @@ export function Subreddit({route, navigation}) {
 
 }
 
-// export class SubredditPreview extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         displayName = props.data.display_name
-//         prefixedName = props.data.display_name_prefixed
-//
-//         id = props.data.name
-//         bannerURL = props.data.banner_img
-//         iconURL = props.data.icon_img
-//         headerURL = props.data.header_img
-//         desc = props.data.description
-//         subscriberCount = props.data.subscribers
-//         createdAt = props.data.created_utc
-//         is_subed = props.data.user_is_subscriber
-//
-//     }
-//
-//     componentDidMount() {
-//     }
-//
-//     render() {
-//         return undefined
-//     }
-//
-// }
-
-    const styles = StyleSheet.create({
-        card: {
-            borderRadius: 15,
-            elevation: 3,
-            backgroundColor: '#fff',
-            shadowOffset: {width: 1, height: 1},
-            shadowColor: '#333',
-            shadowOpacity: 0.3,
-            shadowRadius: 2,
-            marginHorizontal: 4,
-            margin: 10,
-        },
-        text: {
-            margin: 15,
-            fontFamily: "HelveticaNeue",
-            color: "#52575D",
-            // fontSize: 20,
-        }
-    })
+const styles = StyleSheet.create({
+    card: {
+        borderRadius: 15,
+        elevation: 3,
+        backgroundColor: '#fff',
+        shadowOffset: {width: 1, height: 1},
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        marginHorizontal: 4,
+        margin: 10,
+    },
+    text: {
+        margin: 15,
+        fontFamily: "HelveticaNeue",
+        color: "#52575D",
+        // fontSize: 20,
+    }
+})

@@ -73,7 +73,7 @@ export function PostCard(props) {
         // <View style={styles.container}>
         // <View style={styles.card}>
         //     <Text>okok</Text>
-        
+
         // </View>
     )
 }
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
 //             method: 'POST',
 //             headers: {"Authorization": "bearer " + api.access_token},
 //             "User-agent": "redditech",
+// body: formData
 //         })
 //         res = await res.json()
 //         if (!res.error) {
@@ -228,6 +229,7 @@ const styles = StyleSheet.create({
 //             method: 'POST',
 //             headers: {"Authorization": "bearer " + api.access_token},
 //             "User-agent": "redditech",
+// body: formData
 //         })
 //         res = await res.json()
 //         if (!res.error) {
@@ -247,6 +249,7 @@ const styles = StyleSheet.create({
 //             method: 'POST',
 //             headers: {"Authorization": "bearer " + api.access_token},
 //             "User-agent": "redditech",
+// body: formData
 //         })
 //         res = await res.json()
 //         if (!res.error) {
@@ -266,6 +269,7 @@ const styles = StyleSheet.create({
 //             method: 'POST',
 //             headers: {"Authorization": "bearer " + api.access_token},
 //             "User-agent": "redditech",
+// body: formData
 //         })
 //         res = await res.json()
 //         if (!res.error) {
