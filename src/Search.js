@@ -2,7 +2,9 @@ import {useEffect, useState} from "react";
 import {useIsFocused} from "@react-navigation/native";
 import {Searchbar} from "react-native-paper";
 import * as React from "react";
-import {Text, View} from "react-native";
+import {ScrollView, Text, View} from "react-native";
+import {PostCard} from "./Post";
+import { SubredditCard} from "./Subreddit";
 
 export function Search({route, navigation}) {
     const {api, searchQuery} = route.params;
@@ -19,8 +21,10 @@ export function Search({route, navigation}) {
 
     async function autoComplete(query) {
         setSearchQuery(query)
-        api.makeRequest('https://oauth.reddit.com/api/subreddit_autocomplete_v2?limit=5&query=' + encodeURI(query)).then(res => {
-            setAutoComplete(res.data.children.map(v => v.data))
+        api.makeRequest(
+            'https://oauth.reddit.com/api/subreddit_autocomplete_v2?include_profiles=false&limit=10&query='
+            + encodeURI(query)).then(res => {
+            setAutoComplete(res.data.children/*.map(v => v.data)*/)
         })
     }
 
@@ -42,6 +46,7 @@ export function Search({route, navigation}) {
     //         })
     // });
 
+    let i = 0;
 
     return (
         <View>
@@ -51,10 +56,14 @@ export function Search({route, navigation}) {
                 defaultValue={searchQuery}
                 value={newSeachQuery}
             />
-
-            {autoCompleteVals.map(v => {
-                return (<Text>{v.display_name}</Text>) // todo mettre en forme
-            })}
+            <ScrollView>
+                {autoCompleteVals.map(v => {
+                    if (v.kind === 't3')
+                        return (<PostCard api={api} data={v.data} key={i++}/>)
+                    else if (v.kind === 't5')
+                        return (<SubredditCard api={api} data={v.data} key={i++}/>)
+                })}
+            </ScrollView>
         </View>
     )
 

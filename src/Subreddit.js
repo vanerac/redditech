@@ -1,4 +1,39 @@
 import {useState} from "react";
+import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import * as React from "react";
+
+export function SubredditCard(props) {
+    const api = props.api
+    const data = props.data
+
+    const displayName = data.display_name
+    const prefixedName = data.display_name_prefixed
+
+    const post_id = data.name
+    const bannerURL = data.banner_img
+    const iconURL = data.icon_img
+    const headerURL = data.header_img
+    const desc = data.description
+    const subscriberCount = data.subscribers
+    const createdAt = data.created_utc
+    const is_subed = data.user_is_subscriber
+
+
+    return (
+        <View style={styles.card}>
+
+                <Text style={[styles.text, {fontSize: 15}]}>
+                    {prefixedName}
+                    {' - '}
+                    {subscriberCount}
+                    {' Subscribers'}
+                    {'test'}
+                </Text>
+                <Text>{desc}</Text>
+                <View style={{borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10}}/>
+        </View>
+    )
+}
 
 export function Subreddit({route, navigation}) {
 
@@ -99,3 +134,23 @@ export function Subreddit({route, navigation}) {
 //     }
 //
 // }
+
+const styles = StyleSheet.create({
+    card: {
+        borderRadius: 15,
+        elevation: 3,
+        backgroundColor: '#fff',
+        shadowOffset: {width: 1, height: 1},
+        shadowColor: '#333',
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        marginHorizontal: 4,
+        margin: 10,
+    },
+    text: {
+        margin: 15,
+        fontFamily: "HelveticaNeue",
+        color: "#52575D",
+        // fontSize: 20,
+    }
+})

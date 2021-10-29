@@ -65,23 +65,10 @@ export function Home({route, navigation}) {
                     value={searchQuery}
                 />
                 {posts.map(element => {
-                    // <Text>{element.title}</Text>
-                    // console.log("inside map array")
-                    // console.log(element);
                     return (
                         <PostCard api={api} data={element} key={i++}/>
                     )
                 })}
-                {/* <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} />
-                <PostCard api={api} data={posts[0]} /> */}
             </ScrollView>
         </View>
     );
