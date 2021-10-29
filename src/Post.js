@@ -374,7 +374,7 @@ export function Post({route, navigation}) {
 
     return (<View>
         <ScrollView>
-            <Text>{title}</Text>
+            <Text style={[styles.text, {fontSize: 20}]}>{title}</Text>
             {comments.map(comment => {
                 return (
                     <CommentCard data={comment} api={api} key={Math.random()}/>

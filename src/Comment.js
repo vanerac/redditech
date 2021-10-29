@@ -32,10 +32,6 @@ export function CommentCard(props) {
             body: formData
         })
         res = await res.json()
-        if (!res.error) {
-            state.upVote = -1
-            setState(state)
-        }
         return res; // surement inutile
 
     }
@@ -71,10 +67,6 @@ export function CommentCard(props) {
             body: formData
         })
         res = await res.json()
-        if (!res.error) {
-            state.upVote = 1
-            setState(state)
-        }
         return res; // surement inutile
     }
 
@@ -90,10 +82,6 @@ export function CommentCard(props) {
             "User-agent": "redditech",
         })
         res = await res.json()
-        if (!res.error) {
-            state.comments.push(res);
-            setState(state)
-        }
         return res; // surement inutile
     }
 
@@ -106,15 +94,14 @@ export function CommentCard(props) {
 
     return (
         <View style={styles.card}>
-            <Text style={[styles.text, {fontSize: 15}]}>
+            <Text style={[styles.text, {fontSize: 20, margin: 10}]}>
                 {authorName}
             </Text>
-            <Text>
+            <Text style={[styles.text, {fontSize: 15, margin: 10}]}>
                 {body}
             </Text>
         </View>
     );
-
 }
 
 const styles = StyleSheet.create({
