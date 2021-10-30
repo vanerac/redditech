@@ -160,6 +160,8 @@ export function Subreddit({route, navigation}) {
     const isFocused = useIsFocused();
 
     useEffect(() => {
+        if (!isFocused)
+            return
         setSub(data.user_is_subscriber);
         fetchPosts().then(() => {
         });
