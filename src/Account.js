@@ -1,26 +1,17 @@
 import * as React from 'react';
-import {
-    Button,
-    StyleSheet,
-    View,
-    FlatList,
-    Text,
-    Image,
-    TouchableOpacity,
-    SafeAreaView,
-    ScrollView,
-    Switch
-} from 'react-native';
 import {useEffect, useState} from 'react';
-import {NavigationContainer, useIsFocused} from '@react-navigation/native';
+import {Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
+import {SubredditCard} from "./Subreddit";
 
-export function AccountScreen({route}) {
+export function AccountScreen({route, navigation}) {
     const [data, setData] = useState({
         "icon_img": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/2048px-Solid_white.svg.png"
         // "public_description": "tmp"
     });
 
-    const [description, setDescription] = useState();
+    let [description, setDescription] = useState();
+    let [subreddits, setSubreddits] = useState([])
     const {api} = route.params;
 
     const isFocused = useIsFocused();
@@ -28,7 +19,7 @@ export function AccountScreen({route}) {
 
     async function getSubreddits() {
         let subs = await api.makeRequest('https://oauth.reddit.com/subreddits/mine.json')
-        return subs.data.children.map(v => v.data);
+        setSubreddits(subs.data.children.map(v => v.data));
     }
 
     useEffect(() => {
@@ -74,6 +65,15 @@ export function AccountScreen({route}) {
                         :</Text>
                     <Text style={[styles.text, {fontWeight: "200", fontSize: 36}]}>{description}</Text>
                 </View>
+                {subreddits.map(data => {
+                        return (
+                            <TouchableOpacity onPress={() => navigation.push('Subreddit', {data: data, api: api})}
+                                              key={Math.random()}>
+                                <SubredditCard api={api} data={data}/>
+                            </TouchableOpacity>
+                        )
+                    }
+                )}
             </ScrollView>
         </SafeAreaView>
     );

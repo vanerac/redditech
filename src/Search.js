@@ -59,13 +59,15 @@ export function Search({route, navigation}) {
                 {autoCompleteVals.map(v => {
                     if (v.kind === 't3')
                         return (
-                            <TouchableOpacity onPress={() => navigation.push('Post', {data: v.data, api: api})}>
-                                <PostCard api={api} data={v.data} key={Math.random()}/>
+                            <TouchableOpacity onPress={() => navigation.push('Post', {data: v.data, api: api})}
+                                              key={Math.random()}>
+                                <PostCard api={api} data={v.data}/>
                             </TouchableOpacity>
                         )
                     else if (v.kind === 't5')
                         return (
-                            <TouchableOpacity onPress={() => navigation.push('Subreddit', {data: v.data, api: api})}>
+                            <TouchableOpacity onPress={() => navigation.push('Subreddit', {data: v.data, api: api})}
+                                              key={Math.random()}>
                                 <SubredditCard api={api} data={v.data} key={Math.random()}/>
                             </TouchableOpacity>
                         )
