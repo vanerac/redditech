@@ -4,9 +4,8 @@
 
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import {Searchbar} from 'react-native-paper';
 import {PostCard} from "./Post";
 
 export function Home({route, navigation}) {
@@ -15,6 +14,7 @@ export function Home({route, navigation}) {
     const {api} = route.params;
     let [posts, setPosts] = useState([])
     let [subs, setSubs] = useState([])
+    // let [sort, setSort] = useState('best')
 
     const onChangeSearch = query => {
         setSearchQuery(query)
@@ -23,13 +23,13 @@ export function Home({route, navigation}) {
 
     //default value
 
-    async function fetchData(sort='best') {
-        const data = await api.makeRequest('https://oauth.reddit.com/.json?sort=' + sort);
+    async function fetchData(sort = 'hot') {
+        const data = await api.makeRequest(`https://oauth.reddit.com/${sort}.json`);
         const new_posts = data.data.children.filter(p => p.kind === 't3').map(p => p.data);
         const new_subs = data.data.children.filter(p => p.kind === 't5').map(p => p.data);
 
         setPosts(new_posts);
-        setSubs(new_subs);
+        // setSubs(new_subs);
 
         // console.log(new_posts)
     }
@@ -38,14 +38,48 @@ export function Home({route, navigation}) {
 
     useEffect(() => {
         if (isFocused)
-            fetchData().then(
-                // navigation.push()
-            )
-    },[isFocused]);
+            fetchData().then();
+    }, [isFocused]);
 
+
+    // function bestSort() {
+    //     setSort('best');
+    // }
+    // function hotSort() {
+    //     setSort('hot')
+    // }
+    //
+    // function newSort() {
+    //     setSort('new')
+    // }
+
+    let i = 0;
+
+    console.log('loaded')
     return (
         <View>
             {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
+            {/*<Button onPress ={() => fetchData('best') }>{'Best'}</Button>*/}
+            {/*<Button onPress ={() => fetchData('new') }>{'New'}</Button>*/}
+            {/*<Button onPress ={() => fetchData('hot') }>{'Hot'}</Button>*/}
+
+
+            <TouchableOpacity style={styles.button} onPress={() =>
+                fetchData('best')
+            }>
+                <Text style={styles.buttonText}>{'Best'}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={() =>
+                fetchData('new')
+            }>
+                <Text style={styles.buttonText}>{'New'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() =>
+                fetchData('hot')
+            }>
+                <Text style={styles.buttonText}>{'Hot'}</Text>
+            </TouchableOpacity>
             <ScrollView>
                 {/* <Searchbar
                     placeholder="Search"
@@ -56,7 +90,7 @@ export function Home({route, navigation}) {
                 {posts.map(element => {
                     return (
                         <TouchableOpacity onPress={() => navigation.push('Post', {data: element, api: api})}
-                                          key={Math.random()}>
+                                          key={++i}>
                             <PostCard
                                 onClick={() => console.log('clicked')}
                                 style={{cursor: 'pointer'}}
