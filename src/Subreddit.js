@@ -78,22 +78,25 @@ export function SubredditCard(props) {
         }
     }
 
+    const round_subscribers = abbrNum(subscriberCount, 1)
+
     return (
         <View style={styles.card}>
             <Text>
-                <Image
-                    source={{
-                        uri: iconURL || 'https://b.thumbs.redditmedia.com/voAwqXNBDO4JwIODmO4HXXkUJbnVo_mL_bENHeagDNo.png'
-                    }}
-                    style={{width: 30, height: 30, borderRadius: 30 / 2}}
-                />
-
+                {/* <View style={{margin: 15}}> */}
+                    <Image
+                        source={{
+                            uri: iconURL || 'https://b.thumbs.redditmedia.com/voAwqXNBDO4JwIODmO4HXXkUJbnVo_mL_bENHeagDNo.png'
+                        }}
+                        style={{width: 30, height: 30, borderRadius: 15}}
+                    />
+                {/* </View> */}
                 <Text style={[styles.text, {fontSize: 15}]}>
                     {prefixedName}
                     {' - '}
-                    {subscriberCount}
+                    {round_subscribers}
                     {' Subscribers'}
-                    {'         '}
+                    {"\n"}
                 </Text>
                 <Switch
                     trackColor={{false: "#767577", true: "#007bff"}}
@@ -101,14 +104,36 @@ export function SubredditCard(props) {
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSubscription}
                     value={is_subed}
-                    // style={{width: 30, height: 30}}
                 />
             </Text>
 
-            <Text>{short_desc}</Text>
-            <View style={{borderBottomColor: 'black', borderBottomWidth: 1, marginRight: 10, marginLeft: 10}}/>
+            <View>
+                <Text style={[styles.text, {fontSize: 15}]}>
+                    {short_desc}
+                </Text>
+            </View>
         </View>
     )
+}
+
+function abbrNum(number, decPlaces) {
+    decPlaces = Math.pow(10,decPlaces);
+    var abbrev = [ "k", "m", "b", "t" ];
+
+    for (var i=abbrev.length-1; i>=0; i--) {
+        var size = Math.pow(10,(i+1)*3);
+        if(size <= number) {
+             number = Math.round(number*decPlaces/size)/decPlaces;
+             if((number == 1000) && (i < abbrev.length - 1)) {
+                 number = 1;
+                 i++;
+             }
+             number += abbrev[i];
+             break;
+        }
+    }
+
+    return number;
 }
 
 export function Subreddit({route, navigation}) {
@@ -249,6 +274,6 @@ const styles = StyleSheet.create({
         margin: 15,
         fontFamily: "HelveticaNeue",
         color: "#52575D",
-        // fontSize: 20,
-    }
+        fontSize: 20,
+    },
 })

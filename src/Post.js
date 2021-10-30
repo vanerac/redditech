@@ -97,6 +97,7 @@ export function PostCard(props) {
 
     };
 
+    const round_ups = abbrNum(ups, 1)
 
     return (
         <View style={styles.card}>
@@ -117,11 +118,9 @@ export function PostCard(props) {
                             size={30}
                             onPress={() => toggleSwitchVoteUP()}
                         />
-                        {/* <View style={styles.circle}> */}
-                            <Text>
-                                {ups}
+                            <Text style={[styles.likes_ups, {fontSize: 15}]}>
+                                {round_ups}
                             </Text>
-                        {/* </View> */}
                         <IconButton
                             icon={postVote === -1 ? "thumb-down" : "thumb-down-outline"}
                             color={Colors.red500}
@@ -213,6 +212,26 @@ function displayBar(props) {
     }
 }
 
+function abbrNum(number, decPlaces) {
+    decPlaces = Math.pow(10,decPlaces);
+    var abbrev = [ "k", "m", "b", "t" ];
+
+    for (var i=abbrev.length-1; i>=0; i--) {
+        var size = Math.pow(10,(i+1)*3);
+        if(size <= number) {
+             number = Math.round(number*decPlaces/size)/decPlaces;
+             if((number == 1000) && (i < abbrev.length - 1)) {
+                 number = 1;
+                 i++;
+             }
+             number += abbrev[i];
+             break;
+        }
+    }
+
+    return number;
+}
+
 function RenderURL(props) {
     if (props.type == 'video') {
         const video = React.useRef(null);
@@ -256,9 +275,9 @@ const styles = StyleSheet.create({
     },
     circle: {
         flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        width: 150,
+        alignSelf: "center",
+        alignItems: "center",
+        width: 180,
         height: 65,
         borderRadius: 45,
         elevation: 3,
@@ -272,6 +291,12 @@ const styles = StyleSheet.create({
     },
     text: {
         margin: 15,
+        fontFamily: "HelveticaNeue",
+        color: "#52575D",
+        // fontSize: 20,
+    },
+    likes_ups: {
+        margin: 5,
         fontFamily: "HelveticaNeue",
         color: "#52575D",
         // fontSize: 20,

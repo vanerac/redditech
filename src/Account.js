@@ -61,9 +61,12 @@ export function AccountScreen({route, navigation}) {
                     </View>
                 </View>
                 <View style={styles.infoContainer}>
-                    <Text style={[styles.text, {color: "#AEB5BC", fontSize: 20, margin: 20}]}>Profile Description
-                        :</Text>
-                    <Text style={[styles.text, {fontWeight: "200", fontSize: 36}]}>{description}</Text>
+                    <Text style={[styles.text, {color: "#AEB5BC", fontSize: 20, margin: 20}]}>Profile Description :</Text>
+                    <Text style={[styles.text, {fontWeight: "200", fontSize: 36, marginBottom: 15}]}>{description}</Text>
+                </View>
+                <View style={{ borderBottomColor: 'black', borderBottomWidth: 2, marginLeft: 15, marginRight: 15, marginTop: 15 }}/>
+                <View style={styles.infoContainer}>
+                    <Text style={[styles.text, {color: "#AEB5BC", fontSize: 20, margin: 20}]}>Your Subreddits :</Text>
                 </View>
                 {subreddits.map(data => {
                         return (
@@ -82,10 +85,7 @@ export function AccountScreen({route, navigation}) {
 const styles = StyleSheet.create({
     settingsSwitch: {
         flexDirection: "row",
-        // alignSelf: "center",
         marginTop: 32,
-        // flexDirection: "row",
-        // justifyContent: "flex-end"
     },
     logo: {
         marginTop: 50,

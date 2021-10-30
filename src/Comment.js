@@ -132,16 +132,12 @@ export function CommentCard(props) {
     useEffect(() => {
         if (isFocused) {
             setVoteComment(vote)
-            // if (vote == 1)
-            //     setIsVoteUp(1)
-            // else if (vote == -1)
-            //     setIsVoteDown(1)
         }
     }, [isFocused]);
 
+    const round_ups = abbrNum(ups, 1)
+
     return (
-
-
         <View style={styles.card}>
             <Text style={[styles.text, {fontSize: 15, margin: 10}]}>
                 {`Commented by `}
@@ -150,24 +146,47 @@ export function CommentCard(props) {
             <Text style={[styles.text, {fontSize: 15, margin: 10}]}>
                 {body}
             </Text>
-            <View style={styles.statsContainer}>
-                <Text>{ups}</Text>
-                <IconButton
-                    icon={voteComment === 1 ? "thumb-up" : "thumb-up-outline"}
-                    color={Colors.red500}
-                    size={30}
-                    onPress={() => toggleSwitchVoteUP()}
-                />
-                {/* {ups} */}
-                <IconButton
-                    icon={voteComment === -1 ? "thumb-down" : "thumb-down-outline"}
-                    color={Colors.red500}
-                    size={30}
-                    onPress={() => toggleSwitchVoteDown()}
-                />
+            <View style={styles.circle}> 
+                <View style={styles.statsContainer}>
+                    <IconButton
+                        icon={voteComment === 1 ? "thumb-up" : "thumb-up-outline"}
+                        color={Colors.red500}
+                        size={30}
+                        onPress={() => toggleSwitchVoteUP()}
+                    />
+                        <Text style={[styles.likes_ups, {fontSize: 15}]}>
+                            {round_ups}
+                        </Text>
+                    <IconButton
+                        icon={voteComment === -1 ? "thumb-down" : "thumb-down-outline"}
+                        color={Colors.red500}
+                        size={30}
+                        onPress={() => toggleSwitchVoteDown()}
+                    />
+                </View>
             </View>
         </View>
     );
+}
+
+function abbrNum(number, decPlaces) {
+    decPlaces = Math.pow(10,decPlaces);
+    var abbrev = [ "k", "m", "b", "t" ];
+
+    for (var i=abbrev.length-1; i>=0; i--) {
+        var size = Math.pow(10,(i+1)*3);
+        if(size <= number) {
+             number = Math.round(number*decPlaces/size)/decPlaces;
+             if((number == 1000) && (i < abbrev.length - 1)) {
+                 number = 1;
+                 i++;
+             }
+             number += abbrev[i];
+             break;
+        }
+    }
+
+    return number;
 }
 
 const styles = StyleSheet.create({
@@ -181,6 +200,28 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
         marginHorizontal: 4,
         margin: 10,
+    },
+    circle: {
+        flex: 1,
+        alignSelf: "center",
+        alignItems: "center",
+        width: 180,
+        height: 65,
+        borderRadius: 45,
+        elevation: 3,
+        backgroundColor: '#fff',
+        shadowOffset: {width: 1, height: 1},
+        shadowColor: '#333',
+        shadowOpacity: 1,
+        shadowRadius: 2,
+        marginHorizontal: 4,
+        margin: 10,
+    },
+    likes_ups: {
+        margin: 5,
+        fontFamily: "HelveticaNeue",
+        color: "#52575D",
+        // fontSize: 20,
     },
     text: {
         margin: 15,
@@ -203,6 +244,6 @@ const styles = StyleSheet.create({
     statsContainer: {
         flexDirection: "row",
         alignSelf: "center",
-        marginTop: 32
+        marginTop: 10
     },
 })

@@ -47,12 +47,12 @@ export function Home({route, navigation}) {
         <View>
             {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
             <ScrollView>
-                <Searchbar
+                {/* <Searchbar
                     placeholder="Search"
                     onChangeText={onChangeSearch}
                     onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}
                     value={searchQuery}
-                />
+                /> */}
                 {posts.map(element => {
                     return (
                         <TouchableOpacity onPress={() => navigation.push('Post', {data: element, api: api})}
