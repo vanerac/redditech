@@ -109,23 +109,27 @@ export function PostCard(props) {
                 {title}
             </Text>
             <RenderURL type={mediaType} value={mediaValue}></RenderURL>
-            <View style={styles.statsContainer}>
-                <Text>{ups}</Text>
-                <IconButton
-                    icon={postVote === 1 ? "thumb-up" : "thumb-up-outline"}
-                    color={Colors.red500}
-                    size={30}
-                    onPress={() => toggleSwitchVoteUP()}
-                />
-                {/* {ups} */}
-                <IconButton
-                    icon={postVote === -1 ? "thumb-down" : "thumb-down-outline"}
-                    color={Colors.red500}
-                    size={30}
-                    onPress={() => toggleSwitchVoteDown()}
-                />
-                <Text>{downs}</Text>
-            </View>
+                <View style={styles.circle}> 
+                    <View style={styles.statsContainer}>
+                        <IconButton
+                            icon={postVote === 1 ? "thumb-up" : "thumb-up-outline"}
+                            color={Colors.red500}
+                            size={30}
+                            onPress={() => toggleSwitchVoteUP()}
+                        />
+                        {/* <View style={styles.circle}> */}
+                            <Text>
+                                {ups}
+                            </Text>
+                        {/* </View> */}
+                        <IconButton
+                            icon={postVote === -1 ? "thumb-down" : "thumb-down-outline"}
+                            color={Colors.red500}
+                            size={30}
+                            onPress={() => toggleSwitchVoteDown()}
+                        />
+                    </View>
+                </View>
         </View>
     )
 }
@@ -250,6 +254,22 @@ const styles = StyleSheet.create({
         marginHorizontal: 4,
         margin: 10,
     },
+    circle: {
+        flex: 1,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        width: 150,
+        height: 65,
+        borderRadius: 45,
+        elevation: 3,
+        backgroundColor: '#fff',
+        shadowOffset: {width: 1, height: 1},
+        shadowColor: '#333',
+        shadowOpacity: 1,
+        shadowRadius: 2,
+        marginHorizontal: 4,
+        margin: 10,
+    },
     text: {
         margin: 15,
         fontFamily: "HelveticaNeue",
@@ -271,7 +291,7 @@ const styles = StyleSheet.create({
     statsContainer: {
         flexDirection: "row",
         alignSelf: "center",
-        marginTop: 32
+        marginTop: 10
     },
 })
 

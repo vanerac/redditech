@@ -165,7 +165,6 @@ export function CommentCard(props) {
                     size={30}
                     onPress={() => toggleSwitchVoteDown()}
                 />
-                <Text>{downs}</Text>
             </View>
         </View>
     );
