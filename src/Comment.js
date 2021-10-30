@@ -143,11 +143,11 @@ export function CommentCard(props) {
 
 
         <View style={styles.card}>
-            <Text style={[styles.text, {fontSize: 15}]}>
+            <Text style={[styles.text, {fontSize: 15, margin: 10}]}>
                 {`Commented by `}
                 {authorName}
             </Text>
-            <Text>
+            <Text style={[styles.text, {fontSize: 15, margin: 10}]}>
                 {body}
             </Text>
             <View style={styles.statsContainer}>
@@ -169,7 +169,6 @@ export function CommentCard(props) {
             </View>
         </View>
     );
-
 }
 
 const styles = StyleSheet.create({
