@@ -217,12 +217,12 @@ export function Subreddit({route, navigation}) {
                 {/*/>*/}
                 {posts.map(element => {
                     return (
-                        <TouchableOpacity onPress={() => navigation.push('Post', {data: element, api: api})}>
+                        <TouchableOpacity onPress={() => navigation.push('Post', {data: element, api: api})} key={i++}>
                             <PostCard
                                 style={{cursor: 'pointer'}}
                                 api={api}
                                 data={element}
-                                key={i++}/>
+                            />
                         </TouchableOpacity>
 
                     )
