@@ -30,7 +30,7 @@ export function stackWrapper() {
                     if (route.name === 'Home') {
                         return (
                             <Ionicons
-                                name={focused ? 'ios-information-circle' : 'ios-information-circle-outline'}
+                                name={'ios-home-outline'}
                                 size={size}
                                 color={color}
                             />);
@@ -55,6 +55,13 @@ export function stackWrapper() {
                                 size={size}
                                 color={color}
                             />);
+                    } else if (route.name === 'Search') {
+                        return (
+                            <Ionicons
+                                name={'ios-search-outline'}
+                                size={size}
+                                color={color}
+                            />);
                     }
                 },
                 tabBarInactiveTintColor: 'gray',
@@ -63,8 +70,7 @@ export function stackWrapper() {
         >
             <Tab.Screen name="Login" component={(Login)} initialParams={{api: API}}/>
             <Tab.Screen name="Home" component={(Home)} initialParams={{api: API}}/>
-            <Tab.Screen name="Account" component={(AccountScreen)}
-                        initialParams={{api: API}}/>
+            <Tab.Screen name="Account" component={(AccountScreen)} initialParams={{api: API}}/>
             <Tab.Screen name="Settings" component={(Settings)} initialParams={{api: API}}/>
             <Tab.Screen name="Search" component={(Search)} initialParams={{api: API}}/>
         </Tab.Navigator>
@@ -74,16 +80,15 @@ export function stackWrapper() {
 
 const API = new Auth();
 
-
 export default function App() {
     const Stack = createStackNavigator();
 
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name='App' component={stackWrapper}/>
-                <Stack.Screen name="Post" component={(Post)} initialParams={{api: API}}/>
-                <Stack.Screen name="Subreddit" component={(Subreddit)} initialParams={{api: API}}/>
+                <Stack.Screen options={{ title: 'Redditech' }} name='App' component={stackWrapper}/>
+                <Stack.Screen options={{ title: 'Redditech' }} name="Post" component={(Post)} initialParams={{api: API}}/>
+                <Stack.Screen options={{ title: 'Redditech' }} name="Subreddit" component={(Subreddit)} initialParams={{api: API}}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

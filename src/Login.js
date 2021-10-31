@@ -51,9 +51,7 @@ export function Login({route, navigation}) {
                 />
             </View>
             <View style={styles.containerButton}>
-                <TouchableOpacity style={styles.button} onPress={() =>
-                    promptAsync()
-                }>
+                <TouchableOpacity style={styles.button} onPress={() => promptAsync() }>
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
             </View>

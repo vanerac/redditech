@@ -58,35 +58,24 @@ export function Home({route, navigation}) {
     console.log('loaded')
     return (
         <View>
-            {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
-            {/*<Button onPress ={() => fetchData('best') }>{'Best'}</Button>*/}
-            {/*<Button onPress ={() => fetchData('new') }>{'New'}</Button>*/}
-            {/*<Button onPress ={() => fetchData('hot') }>{'Hot'}</Button>*/}
-
-
-            <TouchableOpacity style={styles.button} onPress={() =>
-                fetchData('best')
-            }>
-                <Text style={styles.buttonText}>{'Best'}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button} onPress={() =>
-                fetchData('new')
-            }>
-                <Text style={styles.buttonText}>{'New'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() =>
-                fetchData('hot')
-            }>
-                <Text style={styles.buttonText}>{'Hot'}</Text>
-            </TouchableOpacity>
+            <View style={styles.statsContainerSort}>
+                <View style={[styles.statsBox, {borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1}]}>
+                    <TouchableOpacity style={styles.button} onPress={() => fetchData('best') }>
+                        <Text style={styles.buttonText}>{'Best'}</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={[styles.statsBox, {borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1}]}>
+                    <TouchableOpacity style={styles.button} onPress={() => fetchData('new') }>
+                        <Text style={styles.buttonText}>{'New'}</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={[styles.statsBox, {borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1}]}>
+                    <TouchableOpacity style={styles.button} onPress={() => fetchData('hot') }>
+                        <Text style={styles.buttonText}>{'Hot'}</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
             <ScrollView>
-                {/* <Searchbar
-                    placeholder="Search"
-                    onChangeText={onChangeSearch}
-                    onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}
-                    value={searchQuery}
-                /> */}
                 {posts.map(element => {
                     return (
                         <TouchableOpacity onPress={() => navigation.push('Post', {data: element, api: api})}
@@ -156,6 +145,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignSelf: "center",
         marginTop: 32
+    },
+    statsContainerSort: {
+        flexDirection: "row",
+        alignSelf: "center",
+        marginTop: 10,
+        marginBottom: 10,
     },
     statsBox: {
         alignItems: "center",
