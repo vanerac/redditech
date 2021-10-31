@@ -82,8 +82,8 @@ export function SubredditCard(props) {
 
     return (
         <View style={styles.card}>
-            <Text>
-                {/* <View style={{margin: 15}}> */}
+            {/* <Text> */}
+            <View style={styles.statsContainer}>
                     <Image
                         source={{
                             uri: iconURL || 'https://b.thumbs.redditmedia.com/voAwqXNBDO4JwIODmO4HXXkUJbnVo_mL_bENHeagDNo.png'
@@ -98,6 +98,9 @@ export function SubredditCard(props) {
                     {' Subscribers'}
                     {"\n"}
                 </Text>
+            {/* </Text> */}
+            </View>
+            <View style={{marginLeft: 10}}>
                 <Switch
                     trackColor={{false: "#767577", true: "#007bff"}}
                     thumbColor={is_subed ? "#f4f3f4" : "#f4f3f4"}
@@ -105,7 +108,7 @@ export function SubredditCard(props) {
                     onValueChange={toggleSubscription}
                     value={is_subed}
                 />
-            </Text>
+            </View>
 
             <View>
                 <Text style={[styles.text, {fontSize: 15}]}>
@@ -155,7 +158,7 @@ export function Subreddit({route, navigation}) {
     // const is_subed =
 
     let [is_subed, setSub] = useState(false)
-    let [sort, setSort] = useState('best')
+    //let [sort, setSort] = useState('best')
     let [posts, setPosts] = useState([])
     const isFocused = useIsFocused();
 
@@ -215,7 +218,7 @@ export function Subreddit({route, navigation}) {
         }
     }
 
-    async function fetchPosts() {
+    async function fetchPosts(sort='best') {
         const res = await api.makeRequest('https://oauth.reddit.com' + url + sort + '.json')
 
         setPosts(res.data.children.map(v => v.data));
@@ -233,7 +236,23 @@ export function Subreddit({route, navigation}) {
 
     return (
         <View>
-
+            <View style={styles.statsContainerSort}>
+                <View style={[styles.statsBox, {borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1}]}>
+                    <TouchableOpacity style={styles.button} onPress={() => fetchPosts('best') }>
+                        <Text style={styles.buttonText}>{'Best'}</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={[styles.statsBox, {borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1}]}>
+                    <TouchableOpacity style={styles.button} onPress={() => fetchPosts('new') }>
+                        <Text style={styles.buttonText}>{'New'}</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={[styles.statsBox, {borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1}]}>
+                    <TouchableOpacity style={styles.button} onPress={() => fetchPosts('hot') }>
+                        <Text style={styles.buttonText}>{'Hot'}</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
             {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
             <ScrollView>
                 {/*<Searchbar*/}
@@ -263,6 +282,7 @@ export function Subreddit({route, navigation}) {
 const styles = StyleSheet.create({
     card: {
         borderRadius: 15,
+        borderWidth: 2,
         elevation: 3,
         backgroundColor: '#fff',
         shadowOffset: {width: 1, height: 1},
@@ -273,9 +293,88 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     text: {
-        margin: 15,
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 15,
+        marginBottom: 10,
         fontFamily: "HelveticaNeue",
         color: "#52575D",
         fontSize: 20,
+    },
+    statsContainer: {
+        flexDirection: "row",
+        // alignSelf: "center",
+        marginTop: 10,
+        marginLeft: 10,
+    },
+
+    settingsSwitch: {
+        flexDirection: "row",
+        // alignSelf: "center",
+        marginTop: 32,
+        // flexDirection: "row",
+        // justifyContent: "flex-end"
+    },
+    logo: {
+        marginTop: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: "#FFF"
+    },
+    image: {
+        flex: 1,
+        height: undefined,
+        width: undefined
+    },
+    profileImage: {
+        width: 200,
+        height: 200,
+        borderRadius: 100,
+        overflow: "hidden"
+    },
+    active: {
+        backgroundColor: "#34FFB9",
+        position: "absolute",
+        bottom: 28,
+        left: 10,
+        padding: 4,
+        height: 20,
+        width: 20,
+        borderRadius: 10
+    },
+    infoContainer: {
+        alignSelf: "center",
+        alignItems: "center",
+        marginTop: 16
+    },
+    statsContainerSort: {
+        flexDirection: "row",
+        alignSelf: "center",
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    statsBox: {
+        alignItems: "center",
+        flex: 1
+    },
+    containerButton: {
+        marginTop: 200,
+        margin: 10
+    },
+    button: {
+        borderRadius: 10,
+        padding: 10,
+        backgroundColor: '#FF4500',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    buttonText: {
+        fontSize: 23,
+        top: '-10%',
+        color: 'white',
+        fontWeight: 'bold',
     },
 })

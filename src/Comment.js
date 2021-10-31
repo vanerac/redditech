@@ -193,6 +193,7 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 15,
         elevation: 3,
+        borderWidth: 2,
         backgroundColor: '#fff',
         shadowOffset: {width: 1, height: 1},
         shadowColor: '#333',
@@ -205,6 +206,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: "center",
         alignItems: "center",
+        borderWidth: 1,
         width: 180,
         height: 65,
         borderRadius: 45,

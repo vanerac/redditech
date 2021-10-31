@@ -69,10 +69,10 @@ export function PostCard(props) {
 
         if (postVote === 1) {
             setPostVote(0)
-            unVote(post_id, api)
+            unVote(post_id, api).then(() => data.likes = 0)
         } else {
             setPostVote(1)
-            upVote(post_id, api);
+            upVote(post_id, api).then(() => data.likes = 1);
         }
 
         // if (isVoteDown)
@@ -89,10 +89,10 @@ export function PostCard(props) {
 
         if (postVote === -1) {
             setPostVote(0)
-            unVote(post_id, api)
+            unVote(post_id, api).then(() => data.likes = 0)
         } else {
             setPostVote(-1)
-            downVote(post_id, api);
+            downVote(post_id, api).then(() => data.likes = -1);
         }
 
     };
@@ -265,6 +265,7 @@ const styles = StyleSheet.create({
     card: {
         borderRadius: 15,
         elevation: 3,
+        borderWidth: 2,
         backgroundColor: '#fff',
         shadowOffset: {width: 1, height: 1},
         shadowColor: '#333',
@@ -275,6 +276,7 @@ const styles = StyleSheet.create({
     },
     circle: {
         flex: 1,
+        borderWidth: 1,
         alignSelf: "center",
         alignItems: "center",
         width: 180,
