@@ -14,8 +14,6 @@ import {
 import {useEffect, useState} from 'react';
 import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 
-// boolean problem + style in another file
-
 export function Settings({route, navigation}) {
     const {api} = route.params;
     const [data, setData] = useState({})
@@ -199,10 +197,7 @@ export function Settings({route, navigation}) {
 const styles = StyleSheet.create({
     settingsSwitch: {
         flexDirection: "row",
-        // alignSelf: "center",
         marginTop: 32,
-        // flexDirection: "row",
-        // justifyContent: "flex-end"
     },
     logo: {
         marginTop: 50,

@@ -4,13 +4,11 @@ import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Auth from './API.js'
-
 import {Ionicons} from "@expo/vector-icons";
 import {Search} from "./src/Search";
 import {Settings} from "./src/Settings"
 import {AccountScreen} from "./src/Account.js"
 import {Login} from "./src/Login.js"
-// import {styles} from './style/style.js'
 import {Home} from "./src/Home.js"
 import {createStackNavigator} from "@react-navigation/stack";
 import {Post} from "./src/Post";
@@ -23,7 +21,6 @@ export function stackWrapper() {
     const Tab = createBottomTabNavigator();
 
     return (
-
         <Tab.Navigator
             screenOptions={({route}) => ({
                 tabBarIcon: ({focused, color, size}) => {
@@ -97,10 +94,7 @@ export default function App() {
 const styles = StyleSheet.create({
     settingsSwitch: {
         flexDirection: "row",
-        // alignSelf: "center",
         marginTop: 32,
-        // flexDirection: "row",
-        // justifyContent: "flex-end"
     },
     logo: {
         marginTop: 50,
@@ -150,10 +144,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1
     },
-    // button: {
-    //     width: 300,
-    //     height: 300,
-    // },
     containerButton: {
         marginTop: 200,
         margin: 10

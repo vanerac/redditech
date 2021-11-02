@@ -62,10 +62,7 @@ export function Login({route, navigation}) {
 const styles = StyleSheet.create({
     settingsSwitch: {
         flexDirection: "row",
-        // alignSelf: "center",
         marginTop: 32,
-        // flexDirection: "row",
-        // justifyContent: "flex-end"
     },
     logo: {
         marginTop: 50,

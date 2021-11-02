@@ -13,7 +13,6 @@ export function Search({route, navigation}) {
     const [newSeachQuery, setSearchQuery] = React.useState('');
     const [autoCompleteVals, setAutoComplete] = React.useState([]);
 
-    // todo be able to change tome and sort
     const sort = ['relevance', 'hot', 'top', 'new', 'comments'];
     const t = ['hour', 'day', 'week', 'month', 'year', 'all']
 
@@ -26,25 +25,13 @@ export function Search({route, navigation}) {
         setSearchQuery(query)
     }
 
-    // todo sort by
     const makeSearch = query => {
-        // restrict_sr=false&limit=10&
         api.makeRequest('r/all/hot' /*+ encodeURIComponent(query)*/).then(data => {
             setData(data)
 
         })
         setSearchQuery(query)
     };
-
-    // useEffect(() => {
-    //     if (isFocused)
-    //         api.makeRequest('search?limit=10&q='+encodeURIComponent(searchQuery)).then(data => {
-    //             setData(data)
-    //             console.log(data)
-    //         })
-    // });
-
-    // let i = 0;
 
     return (
         <View>

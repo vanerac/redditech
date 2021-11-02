@@ -15,7 +15,6 @@ export default function Card() {
     return (
         <View style={styles.card}>
             <View style={styles.cardContent}>
-                {/* {props.children} */}
                 <Text>okok</Text>
             </View>
         </View>

@@ -5,8 +5,6 @@ import {Colors, IconButton} from "react-native-paper";
 import {useIsFocused} from "@react-navigation/native";
 
 export function CommentCard(props) {
-    // kind t1
-
     const isFocused = useIsFocused();
 
     const api = props.api
@@ -20,40 +18,27 @@ export function CommentCard(props) {
     const ups = props.data.ups
     const downs = props.data.downs
     const score = props.data.score
-    // todo parse data
 
     let [voteComment, setVoteComment] = useState(0);
     let [comments, setComments] = useState([])
 
     const toggleSwitchVoteUP = async () => {
-        // setIsVoteUp(previousState => !previousState)
-
-        if (postVote === 1) {
+        if (voteComment === 1) {
             setVoteComment(0)
-            unVote(post_id, api)
+            unVote(comment_id, api)
         } else {
             setVoteComment(1)
-            upVote(post_id, api);
+            upVote(comment_id, api);
         }
-
-        // if (isVoteDown)
-        //     setIsVoteDown(previousState => !previousState)
-        // upVote(post_id, api)
-
     };
 
     const toggleSwitchVoteDown = async () => {
-        // setIsVoteDown(previousState => !previousState)
-        // if (isVoteUp)
-        //     setIsVoteUp(previousState => !previousState)
-        // downVote(post_id, api)
-
-        if (postVote === -1) {
+        if (voteComment === -1) {
             setVoteComment(0)
-            unVote(post_id, api)
+            unVote(comment_id, api)
         } else {
             setVoteComment(-1)
-            downVote(post_id, api);
+            downVote(comment_id, api);
         }
 
     };
@@ -110,7 +95,7 @@ export function CommentCard(props) {
     async function sendComment(string) {
         // todo juste une popup, te fait pas chier
         let formData = new FormData();
-        formData.append('thing_id', post_id)
+        formData.append('thing_id', comment_id)
         formData.append('text', string)
         const url = 'https://oauth.reddit.com/api/comment'
         let res = await fetch(url, {
@@ -121,13 +106,6 @@ export function CommentCard(props) {
         res = await res.json()
         return res; // surement inutile
     }
-
-    // todo fetch comment hierarchy ? non c'est le preview
-
-    // todo affichier la hierarchie des commentaires ?? non c'est le preview
-    //  - Display title => title
-    //  - Display desc => desc
-    //  Upvote/downvote
 
     useEffect(() => {
         if (isFocused) {
@@ -223,13 +201,11 @@ const styles = StyleSheet.create({
         margin: 5,
         fontFamily: "HelveticaNeue",
         color: "#52575D",
-        // fontSize: 20,
     },
     text: {
         margin: 15,
         fontFamily: "HelveticaNeue",
         color: "#52575D",
-        // fontSize: 20,
     },
     video: {
         alignSelf: 'center',

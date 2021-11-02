@@ -46,7 +46,7 @@ export function PostCard(props) {
             break;
         case 'image':
             mediaType = 'image';
-            mediaValue = data.url// todo
+            mediaValue = data.url;
             break;
         case 'self':
             mediaType = 'self'
@@ -57,15 +57,10 @@ export function PostCard(props) {
     useEffect(() => {
         if (isFocused) {
             setPostVote(vote)
-            // if (vote == 1)
-            //     setIsVoteUp(1)
-            // else if (vote == -1)
-            //     setIsVoteDown(1)
         }
     }, [isFocused]);
 
     const toggleSwitchVoteUP = async () => {
-        // setIsVoteUp(previousState => !previousState)
 
         if (postVote === 1) {
             setPostVote(0)
@@ -74,19 +69,9 @@ export function PostCard(props) {
             setPostVote(1)
             upVote(post_id, api).then(() => data.likes = 1);
         }
-
-        // if (isVoteDown)
-        //     setIsVoteDown(previousState => !previousState)
-        // upVote(post_id, api)
-
     };
 
     const toggleSwitchVoteDown = async () => {
-        // setIsVoteDown(previousState => !previousState)
-        // if (isVoteUp)
-        //     setIsVoteUp(previousState => !previousState)
-        // downVote(post_id, api)
-
         if (postVote === -1) {
             setPostVote(0)
             unVote(post_id, api).then(() => data.likes = 0)
@@ -237,7 +222,6 @@ function RenderURL(props) {
         const video = React.useRef(null);
         const [status, setStatus] = React.useState({});
         return (
-            // <View style={styles.container}>
             <Video
                 ref={video}
                 style={styles.video}
@@ -295,13 +279,11 @@ const styles = StyleSheet.create({
         margin: 15,
         fontFamily: "HelveticaNeue",
         color: "#52575D",
-        // fontSize: 20,
     },
     likes_ups: {
         margin: 5,
         fontFamily: "HelveticaNeue",
         color: "#52575D",
-        // fontSize: 20,
     },
     video: {
         alignSelf: 'center',
@@ -323,8 +305,6 @@ const styles = StyleSheet.create({
 })
 
 export function Post({route, navigation}) {
-    // kind t3
-
     const {data, api} = route.params
 
     if (!data) {
@@ -370,7 +350,6 @@ export function Post({route, navigation}) {
 
 
     async function sendComment(string) {
-        // todo juste une popup, te fait pas chier
         let formData = new FormData();
         formData.append('thing_id', post_id)
         formData.append('text', string)
@@ -406,20 +385,6 @@ export function Post({route, navigation}) {
         setComments(data.map(v => v.data.children).flat(1).filter(v => v.kind === 't1').map(v => v.data))
 
     }
-
-    // todo fetch comments
-
-    /*Todo:
-        - Display title => title
-        - Display desc => desc
-        - Display Media => mediaType & mediaValue
-        - Display Plusieurs images ?? (pas encore dans le this)
-        - Display Comment list
-        ----------
-        - Display Comments (new component ??)
-        - Handle Upvote, Downvote & unvote
-        - handle new comment
-    */
 
     return (<View>
         <ScrollView>

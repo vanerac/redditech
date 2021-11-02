@@ -155,10 +155,8 @@ export function Subreddit({route, navigation}) {
     const desc = data.description
     const subscriberCount = data.subscribers
     const createdAt = data.created_utc
-    // const is_subed =
 
     let [is_subed, setSub] = useState(false)
-    //let [sort, setSort] = useState('best')
     let [posts, setPosts] = useState([])
     const isFocused = useIsFocused();
 
@@ -184,7 +182,6 @@ export function Subreddit({route, navigation}) {
             Accept: 'application/json'
         })
         console.log(await res.text())
-        // res = await res.json()
         setSub(!is_subed)
 
         return res; // surement inutile
@@ -203,7 +200,6 @@ export function Subreddit({route, navigation}) {
             body: formData
         })
 
-        // res = await res.json()
         setSub(!is_subed)
 
         return res; // surement inutile
@@ -227,13 +223,6 @@ export function Subreddit({route, navigation}) {
 
     let i = 0;
 
-    /* todo
-    *   display subreddit infos
-    *   add subreddit interactions
-    *
-    *  */
-
-
     return (
         <View>
             <View style={styles.statsContainerSort}>
@@ -253,14 +242,7 @@ export function Subreddit({route, navigation}) {
                     </TouchableOpacity>
                 </View>
             </View>
-            {/* <Image source={Image_Http_URL} style={{height: 350}}/> */}
             <ScrollView>
-                {/*<Searchbar*/}
-                {/*    placeholder="Search"*/}
-                {/*    onChangeText={onChangeSearch}*/}
-                {/*    onIconPress={() => navigation.navigate('Search', {searchQuery: searchQuery})}*/}
-                {/*    value={searchQuery}*/}
-                {/*/>*/}
                 {posts.map(element => {
                     return (
                         <TouchableOpacity onPress={() => navigation.push('Post', {data: element, api: api})} key={i++}>
@@ -270,7 +252,6 @@ export function Subreddit({route, navigation}) {
                                 data={element}
                             />
                         </TouchableOpacity>
-
                     )
                 })}
             </ScrollView>
@@ -303,17 +284,13 @@ const styles = StyleSheet.create({
     },
     statsContainer: {
         flexDirection: "row",
-        // alignSelf: "center",
         marginTop: 10,
         marginLeft: 10,
     },
 
     settingsSwitch: {
         flexDirection: "row",
-        // alignSelf: "center",
         marginTop: 32,
-        // flexDirection: "row",
-        // justifyContent: "flex-end"
     },
     logo: {
         marginTop: 50,

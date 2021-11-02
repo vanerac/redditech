@@ -61,14 +61,9 @@ export default class Auth {
             body: formData
         });
         const json = await res.json();
-        // todo : ya des truc a garder ici
         this.access_token = await json.access_token;
         console.log('token:', json.access_token)
         return json;
-    }
-
-    async refreshToken() {
-        // todo
     }
 
     async makeRequest(url) {
@@ -103,7 +98,6 @@ export default class Auth {
 
     async patchRequest(url, body) {
         console.log('Fetching on', url)
-        // console.log(body)
         const res = await fetch(url, {
             method: 'PATCH',
             headers: url.includes('oauth') ? {
@@ -116,8 +110,6 @@ export default class Auth {
         const data = await res.json()
         if (data.error)
             throw data.message;
-
-
         return data;
     }
 }

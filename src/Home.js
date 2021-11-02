@@ -1,7 +1,3 @@
-// todo recuperer les subreddits du mec
-//  recueprer les posts,
-//  ajouter un tri
-
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
@@ -14,7 +10,6 @@ export function Home({route, navigation}) {
     const {api} = route.params;
     let [posts, setPosts] = useState([])
     let [subs, setSubs] = useState([])
-    // let [sort, setSort] = useState('best')
 
     const onChangeSearch = query => {
         setSearchQuery(query)
@@ -29,9 +24,6 @@ export function Home({route, navigation}) {
         const new_subs = data.data.children.filter(p => p.kind === 't5').map(p => p.data);
 
         setPosts(new_posts);
-        // setSubs(new_subs);
-
-        // console.log(new_posts)
     }
 
     const isFocused = useIsFocused();
@@ -40,18 +32,6 @@ export function Home({route, navigation}) {
         if (isFocused)
             fetchData().then();
     }, [isFocused]);
-
-
-    // function bestSort() {
-    //     setSort('best');
-    // }
-    // function hotSort() {
-    //     setSort('hot')
-    // }
-    //
-    // function newSort() {
-    //     setSort('new')
-    // }
 
     let i = 0;
 
@@ -97,10 +77,7 @@ export function Home({route, navigation}) {
 const styles = StyleSheet.create({
     settingsSwitch: {
         flexDirection: "row",
-        // alignSelf: "center",
         marginTop: 32,
-        // flexDirection: "row",
-        // justifyContent: "flex-end"
     },
     logo: {
         marginTop: 50,

@@ -7,7 +7,6 @@ import {SubredditCard} from "./Subreddit";
 export function AccountScreen({route, navigation}) {
     const [data, setData] = useState({
         "icon_img": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/2048px-Solid_white.svg.png"
-        // "public_description": "tmp"
     });
 
     let [description, setDescription] = useState();
@@ -16,7 +15,6 @@ export function AccountScreen({route, navigation}) {
 
     const isFocused = useIsFocused();
 
-
     async function getSubreddits() {
         let subs = await api.makeRequest('https://oauth.reddit.com/subreddits/mine.json')
         setSubreddits(subs.data.children.map(v => v.data));
@@ -24,7 +22,7 @@ export function AccountScreen({route, navigation}) {
 
     useEffect(() => {
         if (isFocused) {
-            getSubreddits() // todo
+            getSubreddits()
             api.makeRequest('https://oauth.reddit.com/api/v1/me').then(data => {
                 setData(data)
                 setDescription(data.subreddit.public_description)
