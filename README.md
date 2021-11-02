@@ -1,0 +1,2 @@
+# redditech
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/bd7441c3755a45a689895aea3c86c9f2)](https://app.codacy.com/gh/vanerac/redditech?utm_source=github.com&utm_medium=referral&utm_content=vanerac/redditech&utm_campaign=Badge_Grade_Settings)
